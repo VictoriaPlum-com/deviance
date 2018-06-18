@@ -1,0 +1,25 @@
+{
+  "name": "nightwatch-deviance",
+  "version": "1.0.0",
+  "description": "Extends NightwatchJS with a reporting tool and the ability to do visual regression assertions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VictoriaPlum-com/deviance.git"
+  },
+  "keywords": [
+    "NightwatchJS",
+    "Visual",
+    "Regression",
+    "Reporting"
+  ],
+  "author": "David Tolman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VictoriaPlum-com/deviance/issues"
+  },
+  "homepage": "https://github.com/VictoriaPlum-com/deviance#readme"
+}
