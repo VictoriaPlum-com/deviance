@@ -33,6 +33,7 @@
     "dependencies": {},
     "devDependencies": {
         "eslint": "^4.19.1",
-        "eslint-config-airbnb-base": "^12.1.0"
+        "eslint-config-airbnb-base": "^12.1.0",
+        "nightwatch": "1.0.6"
     }
 }
