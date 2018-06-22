@@ -4,7 +4,7 @@ module.exports = {
     selenium: {
         start_process: true,
         server_path: `${__dirname}/lib/selenium-server-standalone-3.12.0.jar`,
-        log_path: `${__dirname}/logs/selenium`,
+        log_path: `${__dirname}`,
         cli_args: {
             'webdriver.chrome.driver': `${__dirname}/lib/chromedriver`,
         },
