@@ -1,4 +1,5 @@
 module.exports = {
+    '@tags': ['isolate'],
     'Squirrel test': function squirrelTest(browser) {
         browser
             .url(`${browser.launchUrl}/squirrel.html`)
