@@ -4,7 +4,12 @@
     "description": "Extends NightwatchJS with a reporting tool and the ability to do visual regression assertions",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "babel src --out-dir dist",
+        "watch": "babel --watch src --out-dir dist",
+        "nightwatch:serve": "http-server",
+        "nightwatch:nightwatch": "yarn build && wait-on http://localhost:8080 && nightwatch -c ./nightwatch/nightwatch.conf.js",
+        "nightwatch": "yarn nightwatch:nightwatch & yarn nightwatch:serve"
     },
     "repository": {
         "type": "git",
@@ -32,10 +37,14 @@
     "homepage": "https://github.com/VictoriaPlum-com/deviance#readme",
     "dependencies": {},
     "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-core": "^6.26.3",
+        "babel-preset-env": "^1.7.0",
         "eslint": "^4.19.1",
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.12.0",
         "http-server": "^0.11.1",
-        "nightwatch": "1.0.6"
+        "nightwatch": "1.0.6",
+        "wait-on": "^2.1.0"
     }
 }
