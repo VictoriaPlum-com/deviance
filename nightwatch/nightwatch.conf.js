@@ -1,6 +1,7 @@
 module.exports = {
     src_folders: `${__dirname}/tests`,
     output_folder: `${__dirname}/output`,
+    globals_path: 'globals.js',
     selenium: {
         start_process: true,
         server_path: `${__dirname}/lib/selenium-server-standalone-3.12.0.jar`,
@@ -21,3 +22,4 @@ module.exports = {
         },
     },
 };
+
