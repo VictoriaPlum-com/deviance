@@ -1,8 +1,5 @@
-const Deviance = require('./../dist');
+const Deviance = require('./../dist').default;
 
 module.exports = {
-    reporter: function reporter(results, done) {
-        console.log(results);
-        done();
-    },
+    reporter: Deviance.reporter,
 };
