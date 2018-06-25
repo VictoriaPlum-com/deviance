@@ -8,11 +8,15 @@ module.exports = {
         log_path: `${__dirname}`,
         cli_args: {
             'webdriver.chrome.driver': `${__dirname}/lib/chromedriver`,
+            'webdriver.gecko.driver': `${__dirname}/lib/geckodriver`,
         },
     },
     test_settings: {
         default: {
             launch_url: 'http://localhost:8080',
+            desiredCapabilities: {
+                browserName: 'firefox',
+            },
         },
         chrome: {
             desiredCapabilities: {
