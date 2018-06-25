@@ -7,9 +7,10 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "babel src --out-dir dist",
         "watch": "babel --watch src --out-dir dist",
-        "nightwatch:serve": "http-server",
-        "nightwatch:nightwatch": "yarn build && wait-on http://localhost:8080 && nightwatch -c ./example/nightwatch.conf.js",
-        "nightwatch": "yarn nightwatch:nightwatch & yarn nightwatch:serve"
+        "server": "http-server",
+        "nightwatch": "yarn build && nightwatch",
+        "runExample": "concurrently -k -s first -r \"npm:server\" \"npm:nightwatch\"",
+        "runExample:chrome": "concurrently -k -s first -r \"npm:server\" \"npm:nightwatch -- -e chrome\""
     },
     "repository": {
         "type": "git",
@@ -40,6 +41,7 @@
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.3",
         "babel-preset-env": "^1.7.0",
+        "concurrently": "^3.6.0",
         "eslint": "^4.19.1",
         "eslint-config-airbnb-base": "^12.1.0",
         "eslint-plugin-import": "^2.12.0",
