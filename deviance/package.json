@@ -1,16 +1,11 @@
 {
-    "name": "nightwatch-deviance",
+    "name": "deviance",
     "version": "1.0.0",
     "description": "Extends NightwatchJS with a reporting tool and the ability to do visual regression assertions",
-    "main": "index.js",
+    "main": "dist/index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "babel src --out-dir dist",
-        "watch": "babel --watch src --out-dir dist",
-        "server": "http-server",
-        "nightwatch": "yarn build && nightwatch",
-        "runExample": "concurrently -k -s first -r \"npm:server\" \"npm:nightwatch\"",
-        "runExample:chrome": "concurrently -k -s first -r \"npm:server\" \"npm:nightwatch -- -e chrome\""
+        "watch": "babel --watch src --out-dir dist"
     },
     "repository": {
         "type": "git",
@@ -41,12 +36,14 @@
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.3",
         "babel-preset-env": "^1.7.0",
-        "concurrently": "^3.6.0",
         "eslint": "^4.19.1",
         "eslint-config-airbnb-base": "^12.1.0",
-        "eslint-plugin-import": "^2.12.0",
-        "http-server": "^0.11.1",
-        "nightwatch": "1.0.6",
-        "wait-on": "^2.1.0"
-    }
+        "eslint-plugin-import": "^2.12.0"
+    },
+    "files": [
+        "LICENSE.md",
+        "README.md",
+        "/dist",
+        "/src"
+    ]
 }
