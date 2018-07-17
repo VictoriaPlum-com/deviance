@@ -43,7 +43,6 @@
     "files": [
         "LICENSE.md",
         "README.md",
-        "/dist",
-        "/src"
+        "/dist"
     ]
 }
