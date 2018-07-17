@@ -1,14 +1,14 @@
 module.exports = {
-    src_folders: 'example/tests',
-    output_folder: 'example/output',
-    globals_path: 'example/globals.js',
+    src_folders: 'tests',
+    output_folder: 'output',
+    globals_path: 'globals.js',
     selenium: {
         start_process: true,
-        server_path: 'example/lib/selenium-server-standalone-3.12.0.jar',
-        log_path: 'example',
+        server_path: 'lib/selenium-server-standalone-3.12.0.jar',
+        log_path: '',
         cli_args: {
-            'webdriver.chrome.driver': 'example/lib/chromedriver',
-            'webdriver.gecko.driver': 'example/lib/geckodriver',
+            'webdriver.chrome.driver': 'lib/chromedriver',
+            'webdriver.gecko.driver': 'lib/geckodriver',
         },
     },
     test_settings: {
