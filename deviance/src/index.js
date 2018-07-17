@@ -1,6 +1,9 @@
+import htmlReporter from './reporting/html-reporter';
+
 module.exports = class Deviance {
     static reporter(results, done) {
-        console.log(results);
+        htmlReporter.write(results);
+
         done();
     }
 };
