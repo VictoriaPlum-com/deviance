@@ -4,8 +4,8 @@
     "description": "Extends NightwatchJS with a reporting tool and the ability to do visual regression assertions",
     "main": "dist/index.js",
     "scripts": {
-        "build": "babel src --out-dir dist",
-        "watch": "babel --watch src --out-dir dist"
+        "build": "babel src --out-dir dist --copy-files",
+        "watch": "babel --watch src --out-dir dist --copy-files"
     },
     "repository": {
         "type": "git",
@@ -31,14 +31,14 @@
         "url": "https://github.com/VictoriaPlum-com/deviance/issues"
     },
     "homepage": "https://github.com/VictoriaPlum-com/deviance#readme",
-    "dependencies": {},
     "devDependencies": {
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.3",
         "babel-preset-env": "^1.7.0",
         "eslint": "^4.19.1",
         "eslint-config-airbnb-base": "^12.1.0",
-        "eslint-plugin-import": "^2.12.0"
+        "eslint-plugin-import": "^2.12.0",
+        "handlebars": "^4.0.11"
     },
     "files": [
         "LICENSE.md",
