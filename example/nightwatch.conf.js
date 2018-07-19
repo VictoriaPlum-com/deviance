@@ -1,14 +1,16 @@
+const jar = require('selenium-server-standalone-jar');
+
 module.exports = {
     src_folders: 'tests',
     output_folder: 'output',
     globals_path: 'globals.js',
     selenium: {
         start_process: true,
-        server_path: 'lib/selenium-server-standalone-3.12.0.jar',
+        server_path: jar.path,
         log_path: '',
         cli_args: {
-            'webdriver.chrome.driver': 'lib/chromedriver',
-            'webdriver.gecko.driver': 'lib/geckodriver',
+            'webdriver.chrome.driver': 'node_modules/.bin/chromedriver',
+            'webdriver.gecko.driver': 'node_modules/.bin/geckodriver',
         },
     },
     test_settings: {
