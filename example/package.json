@@ -6,14 +6,15 @@
   "license": "MIT",
   "scripts": {
     "server": "http-server",
-    "sym": "cd ../deviance && yarn link && cd ../example && yarn link deviance",
+    "bump": "yarn upgrade deviance",
+    "sym": "cd ../ && yarn link && cd example && yarn link deviance",
     "nightwatch": "yarn sym && nightwatch",
-    "runExample": "concurrently -k -s first -r \"npm:server\" \"npm:nightwatch\"",
-    "runExample:chrome": "concurrently -k -s first -r \"npm:server\" \"npm:nightwatch -- -e chrome\""
+    "example": "concurrently -k -s first -r \"npm:server\" \"npm:nightwatch\"",
+    "example:chrome": "concurrently -k -s first -r \"npm:server\" \"npm:nightwatch -- -e chrome\""
   },
   "dependencies": {
     "concurrently": "^3.6.0",
-    "deviance": "./../deviance",
+    "deviance": "./..",
     "http-server": "^0.11.1",
     "nightwatch": "1.0.6",
     "npm-delay": "^1.0.4"
