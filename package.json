@@ -20,10 +20,13 @@
         "e2e-testing"
     ],
     "author": "VictoriaPlum.com",
-    "contributors": [
-        {
+    "contributors": [{
             "name": "David Tolman",
             "email": "david.tolman@victoriaplum.com"
+        },
+        {
+            "name": "Andy Wilson",
+            "email": "andy.wilson@victoriaplum.com"
         }
     ],
     "license": "MIT",
