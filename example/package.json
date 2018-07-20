@@ -5,12 +5,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "server": "http-server",
+    "server": "http-server -p 8069",
     "bump": "yarn upgrade deviance",
     "sym": "cd ../ && yarn link && cd example && yarn link deviance",
-    "nightwatch": "yarn sym && nightwatch",
-    "example": "run-p server nightwatch",
-    "example:chrome": "run-p server nightwatch -- -e chrome"
+    "nightwatch": "yarn sym && nightwatch"
   },
   "dependencies": {
     "chromedriver": "^2.40.0",
