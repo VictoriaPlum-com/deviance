@@ -4,6 +4,7 @@ module.exports = {
         browser
             .url(`${browser.launchUrl}/squirrel.html`)
             .waitForElementPresent('body', 1000)
-            .expect.element('h1').text.to.equal('Squirrel');
+            .captureElementScreenshot('img', 'all-squirrel.jpg')
+            .captureElementScreenshot('h1', 'all-h1.jpg');
     },
 };

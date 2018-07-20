@@ -4,6 +4,9 @@ module.exports = {
     src_folders: 'tests',
     output_folder: 'output',
     globals_path: 'globals.js',
+    custom_commands_path: [
+        'node_modules/deviance/dist/commands',
+    ],
     selenium: {
         start_process: true,
         server_path: jar.path,
