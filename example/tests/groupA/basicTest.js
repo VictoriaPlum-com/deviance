@@ -4,7 +4,7 @@ module.exports = {
         browser
             .url(`${browser.launchUrl}/squirrel.html`)
             .waitForElementPresent('body', 1000)
-            .captureElementScreenshot('img', 'all-squirrel.jpg')
-            .captureElementScreenshot('h1', 'all-h1.jpg');
+            .captureElementScreenshot('img', 'all-squirrel')
+            .captureElementScreenshot('h1', 'all-h1');
     },
 };
