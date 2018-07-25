@@ -20,7 +20,8 @@
         "e2e-testing"
     ],
     "author": "VictoriaPlum.com",
-    "contributors": [{
+    "contributors": [
+        {
             "name": "David Tolman",
             "email": "david.tolman@victoriaplum.com"
         },
@@ -35,6 +36,7 @@
     },
     "homepage": "https://github.com/VictoriaPlum-com/deviance#readme",
     "dependencies": {
+        "fs-extra": "^7.0.0",
         "handlebars": "^4.0.11",
         "jimp": "^0.2.28",
         "opn": "^5.3.0",

@@ -8,7 +8,66 @@ The app proper exists at the top level, it includes a few commands for processin
 
 http-server is configured to use port 8069.
 
-## Usage
+## Setup
+
+NightwatchJS will need to be told to load in the command and assertion provided by Deviance.
+To do this add the following lines to your NightwatchJS configuration file(s):
+
+```javascript
+custom_commands_path: [
+    'node_modules/deviance/dist/commands',
+],
+custom_commands_path: [
+    'node_modules/deviance/dist/assertions',
+],
+```
+Note that these properties accept an array and can be used with other commands and assertions. They should sit at the same depth as `src_folders` within the configuration file. You can read more about configuration settings in the [NightwatchJS configuration documentation](http://nightwatchjs.org/gettingstarted#settings-file). 
+
+Deviance will default to the following settings:
+
+```javascript
+const defaultSettings = {
+    reporting: {
+        outputPath: 'tests_output/deviance/report',
+    },
+    regression: {
+        baselinePath: 'tests_output/deviance/regression/baselines',
+        currentPath: 'tests_output/deviance/regression/current',
+    },
+};
+```
+You can modify these settings from within your globals file, as is defined by `globals_path` within your NightwatchJS configuration file.
+
+```javascript
+const Deviance = require('deviance');
+
+/*
+ * Deviance can be constructed with settings to fit your requirements.
+ * You can override just a single settings, some or all of them. 
+ */
+const deviance = new Deviance({
+    reporting: {
+        outputPath: 'your/report/path',
+    },
+    regression: {
+        baselinePath: 'your/regression/baseline/path',
+        currentPath: 'your/regression/baseline/path',
+    },
+});
+
+/*
+ * Then we provide NightwatchJS with the deviance settings as a global property
+ * and define the reporter. You do not have to use the deviance reporter, but the
+ * settings are mandatory for deviance to function
+ */
+module.exports = {
+    deviance: deviance.settings,
+    reporter: deviance.reporter,
+};
+
+```
+
+## Example Usage 
 
 -   Deviance
     -   `yarn build` will compile any changes to the src dir to dist
