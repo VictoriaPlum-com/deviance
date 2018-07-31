@@ -28,10 +28,10 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
                                     .quality(100)
                                     .write(targetFilename);
 
-                                this.emit('complete');
+                                this.emit('complete', targetFilename);
                             })
                             .catch((err) => {
-                                this.emit(err);
+                                this.emit('error', err);
                             });
                     });
                 });

@@ -5,8 +5,8 @@ const defaultSettings = {
         outputPath: 'tests_output/deviance/report',
     },
     regression: {
-        baselinePath: 'tests_output/deviance/regression/baselines',
-        currentPath: 'tests_output/deviance/regression/current',
+        expectedPath: 'tests_output/deviance/regression/expected',
+        actualPath: 'tests_output/deviance/regression/actual',
     },
 };
 

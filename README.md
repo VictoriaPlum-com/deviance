@@ -31,8 +31,8 @@ const defaultSettings = {
         outputPath: 'tests_output/deviance/report',
     },
     regression: {
-        baselinePath: 'tests_output/deviance/regression/baselines',
-        currentPath: 'tests_output/deviance/regression/current',
+        expectedPath: 'tests_output/deviance/regression/expected',
+        actualPath: 'tests_output/deviance/regression/actual',
     },
 };
 ```
@@ -50,8 +50,8 @@ const deviance = new Deviance({
         outputPath: 'your/report/path',
     },
     regression: {
-        baselinePath: 'your/regression/baseline/path',
-        currentPath: 'your/regression/baseline/path',
+        expectedPath: 'your/regression/expected/path',
+        actualPath: 'your/regression/actual/path',
     },
 });
 
