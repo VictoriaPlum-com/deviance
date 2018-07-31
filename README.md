@@ -33,6 +33,7 @@ const defaultSettings = {
     regression: {
         expectedPath: 'tests_output/deviance/regression/expected',
         actualPath: 'tests_output/deviance/regression/actual',
+        threshold: 0.1,
     },
 };
 ```
@@ -52,6 +53,7 @@ const deviance = new Deviance({
     regression: {
         expectedPath: 'your/regression/expected/path',
         actualPath: 'your/regression/actual/path',
+        threshold: 0.15,
     },
 });
 

@@ -5,7 +5,7 @@ const deviance = new Deviance({
         outputPath: 'output/deviance/report',
     },
     regression: {
-        expectedPath: 'output/deviance/regression/expected',
+        expectedPath: 'regression/expected',
         actualPath: 'output/deviance/regression/actual',
     },
 });
