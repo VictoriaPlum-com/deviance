@@ -7,6 +7,9 @@ module.exports = {
     custom_commands_path: [
         'node_modules/deviance/dist/commands',
     ],
+    custom_assertions_path: [
+        'node_modules/deviance/dist/assertions',
+    ],
     selenium: {
         start_process: true,
         server_path: jar.path,

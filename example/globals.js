@@ -7,6 +7,7 @@ const deviance = new Deviance({
     regression: {
         expectedPath: 'regression/expected',
         actualPath: 'output/deviance/regression/actual',
+        threshold: 0.001,
     },
 });
 

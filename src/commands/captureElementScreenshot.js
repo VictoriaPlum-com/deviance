@@ -1,39 +1,66 @@
-import generatePath from '../path-generator';
+import generatePaths from '../path-generator';
 import { hasProperty } from '../helpers';
 
 const { EventEmitter } = require('events');
 const Jimp = require('jimp');
 const fs = require('fs-extra');
-const path = require('path');
 
 module.exports = class CaptureElementScreenshot extends EventEmitter {
-    command(selector = 'body', filename = selector) {
+    command(selector = 'body', filename = selector, callback = () => {}) {
         const { api } = this.client;
         const { regression: settings } = api.globals.deviance;
+        const { name: testName, module: testModule } = api.currentTest;
+        const filenames = generatePaths(settings, filename, testName, testModule);
 
-        process.nextTick(() => {
-            api.getLocation(selector, ({ value: { x, y } }) => {
-                api.getElementSize(selector, ({ value: { width, height } }) => {
-                    api.screenshot(false, (screenshotEncoded) => {
-                        Jimp.read(Buffer.from(screenshotEncoded.value, 'base64'))
-                            .then((image) => {
-                                const targetFilename = generatePath(settings, filename);
+        api.getLocation(selector, ({ value: { x, y } }) => {
+            api.getElementSize(selector, ({ value: { width, height } }) => {
+                api.screenshot(false, (screenshotEncoded) => {
+                    const results = {};
+                    const jimpOperations = [Jimp.read(Buffer.from(screenshotEncoded.value, 'base64'))];
+                    if (fs.existsSync(filenames.expected)) {
+                        jimpOperations.push(Jimp.read(filenames.expected));
+                    }
 
-                                if (!hasProperty(settings, 'hasDevianceCaptured')) {
-                                    settings.hasDevianceCaptured = true;
-                                    fs.emptyDirSync(path.dirname(targetFilename));
-                                }
+                    Promise.all(jimpOperations)
+                        .then(([actual, expected]) => {
+                            if (!hasProperty(settings, 'hasDevianceCaptured')) {
+                                settings.hasDevianceCaptured = true;
+                                fs.emptyDirSync(settings.actualPath);
+                            }
 
-                                image.crop(x, y, width, height)
+                            actual.crop(x, y, width, height)
+                                .quality(100)
+                                .write(filenames.actual);
+                            results.actual = {
+                                path: filenames.actual,
+                                width,
+                                height,
+                            };
+
+                            if (expected) {
+                                results.expected = {
+                                    path: filenames.expected,
+                                    width: expected.bitmap.width,
+                                    height: expected.bitmap.height,
+                                };
+
+                                const diff = Jimp.diff(actual, expected);
+                                results.diff = {
+                                    path: filenames.diff,
+                                    percent: diff.percent,
+                                };
+                                diff
+                                    .image
                                     .quality(100)
-                                    .write(targetFilename);
+                                    .write(filenames.diff);
+                            }
 
-                                this.emit('complete', targetFilename);
-                            })
-                            .catch((err) => {
-                                this.emit('error', err);
-                            });
-                    });
+                            callback(results);
+                            this.emit('complete', results);
+                        })
+                        .catch((err) => {
+                            this.emit('error', err);
+                        });
                 });
             });
         });
