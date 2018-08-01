@@ -19,6 +19,10 @@ exports.assertion = function elementRegression(selector, settings = {}, filename
             return false;
         }
 
+        if (hasProperty(actual, 'criticalThreshold')) {
+            this.expected = 0.0005;
+        }
+
         const meetsCriteria = diff.percent < this.expected;
         if (!meetsCriteria) {
             this.message = `Deviance regression (fail): <${selector}> comparison failed`;

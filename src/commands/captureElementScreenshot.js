@@ -28,6 +28,25 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
                                 fs.emptyDirSync(settings.actualPath);
                             }
 
+                            const pixelsWide = [...Array(width).keys()];
+                            const pixelsHigh = [...Array(height).keys()];
+                            const distribution = {};
+                            const total = width * height;
+
+                            pixelsHigh.forEach((py) => {
+                                const pyi = py + y;
+                                pixelsWide.forEach((px) => {
+                                    const pxi = px + x;
+                                    const colour = actual.getPixelColor(pxi, pyi);
+                                    if (hasProperty(distribution, colour)) {
+                                        distribution[colour] += 1;
+                                    } else {
+                                        distribution[colour] = 1;
+                                    }
+                                });
+                            });
+
+                            const mostFrequent = Math.max(...Object.values(distribution));
                             actual.crop(x, y, width, height)
                                 .quality(100)
                                 .write(filenames.actual);
@@ -36,6 +55,10 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
                                 width,
                                 height,
                             };
+
+                            if ((mostFrequent / total) > 0.8) {
+                                results.actual.criticalThreshold = true;
+                            }
 
                             if (expected) {
                                 results.expected = {
