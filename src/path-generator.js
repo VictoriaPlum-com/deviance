@@ -1,29 +1,12 @@
 const path = require('path');
 
-export const types = {
-    baseline: 0,
-    current: 1,
-    diff: 2,
-};
+export default function generatePaths(settings, filename, testName, testModule) {
+    const name = testName.replace(/[^a-z0-9]/gi, '-');
+    const file = `${filename.replace(/[^a-z0-9]/gi, '-')}.png`;
 
-export default function generatorPath(settings, filename, type = types.current) {
-    let basePath;
-    switch (type) {
-    case types.baseline:
-        basePath = settings.baselinePath;
-        break;
-    case types.current:
-        basePath = settings.currentPath;
-        break;
-    case types.diff:
-        basePath = path.join(settings.currentPath, 'diff');
-        break;
-    default:
-        throw new Error('Invalid type provided for visual regression filename');
-    }
-
-    const combinedFilename = `${filename}.png`;
-
-    return path.join(basePath, combinedFilename);
+    return {
+        expected: path.join(settings.expectedPath, testModule, name, file),
+        actual: path.join(settings.actualPath, testModule, name, file),
+        diff: path.join(settings.actualPath, testModule, name, 'diff', file),
+    };
 }
-
