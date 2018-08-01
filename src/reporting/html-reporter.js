@@ -1,12 +1,11 @@
 const fs = require('fs-extra');
 const path = require('path');
 const handlebars = require('handlebars');
-const prompt = require('prompt');
 const opn = require('opn');
 
 module.exports = {
     write: (results, settings) => {
-        const { outputPath } = settings;
+        const { outputPath, openReport } = settings;
         const templatePath = path.join(__dirname, 'templates', 'html-report.hbs');
 
         fs.readFile(templatePath, (err, data) => {
@@ -27,27 +26,11 @@ module.exports = {
                     throw error;
                 }
 
-                prompt.start({ noHandleSIGINT: true });
+                const showReport = process.env.OPEN_REPORT || openReport;
 
-                const schema = {
-                    properties: {
-                        report: {
-                            description: 'Do you want to open generated report? (yes/no)',
-                            type: 'string',
-                            required: true,
-                        },
-                    },
-                };
-
-                prompt.get(schema, (errors, result) => {
-                    if (errors) {
-                        throw errors;
-                    }
-
-                    if (result.report === 'yes') {
-                        opn(reportPath, { wait: false });
-                    }
-                });
+                if (showReport) {
+                    opn(reportPath, { wait: false });
+                }
             });
         });
     },

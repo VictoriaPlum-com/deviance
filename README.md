@@ -29,6 +29,7 @@ Deviance will default to the following settings:
 const defaultSettings = {
     reporting: {
         outputPath: 'tests_output/deviance/report',
+        openReport: false,
     },
     regression: {
         expectedPath: 'tests_output/deviance/regression/expected',
@@ -49,6 +50,7 @@ const Deviance = require('deviance');
 const deviance = new Deviance({
     reporting: {
         outputPath: 'your/report/path',
+        openReport: true,
     },
     regression: {
         expectedPath: 'your/regression/expected/path',
@@ -67,6 +69,11 @@ module.exports = {
     reporter: deviance.reporter,
 };
 
+```
+
+You can optionally override the openReport setting by setting a node environment variable when running NightwatchJS.
+```node
+OPEN_REPORT=false nightwatch
 ```
 
 ## Example Usage 
