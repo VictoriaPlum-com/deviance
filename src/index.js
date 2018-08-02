@@ -5,6 +5,7 @@ const path = require('path');
 const defaultSettings = {
     reporting: {
         outputPath: 'tests_output/deviance/report',
+        openReport: false,
     },
     regression: {
         expectedPath: 'tests_output/deviance/regression/expected',
