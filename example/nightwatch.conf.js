@@ -4,6 +4,7 @@ module.exports = {
     src_folders: 'tests',
     output_folder: 'output',
     globals_path: 'globals.js',
+    live_output: true,
     custom_commands_path: [
         'node_modules/deviance/dist/commands',
     ],
