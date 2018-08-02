@@ -1,4 +1,4 @@
-import htmlReporter from './reporting/html-reporter';
+import reporter from './reporting/reporter';
 
 const path = require('path');
 
@@ -36,7 +36,7 @@ module.exports = class Deviance {
     }
 
     reporter(results, done) {
-        htmlReporter.write(results, this.deviance.reporting);
+        reporter.write(results, this.deviance);
 
         done();
     }

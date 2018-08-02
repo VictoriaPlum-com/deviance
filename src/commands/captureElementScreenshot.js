@@ -33,8 +33,8 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
                                 .write(filenames.actual);
                             results.actual = {
                                 path: filenames.actual,
-                                width,
-                                height,
+                                width: Math.round(width),
+                                height: Math.round(height),
                             };
 
                             if (expected) {
