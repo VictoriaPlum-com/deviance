@@ -14,5 +14,6 @@ module.exports = {
             { 'blankLine': 'always', 'prev': 'if', 'next': '*' },
         ],
         'no-new': 0,
+        'no-console': 0,
     },
 };
