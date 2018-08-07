@@ -28,7 +28,6 @@ module.exports = {
             }
         };
 
-        console.log("prepromt");
         _prompt2.default.get(schema, (errors, { report }) => {
             if (errors) {
                 throw errors;
