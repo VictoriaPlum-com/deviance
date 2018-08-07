@@ -6,10 +6,10 @@ module.exports = {
     globals_path: 'globals.js',
     live_output: true,
     custom_commands_path: [
-        'node_modules/deviance/dist/commands',
+        'node_modules/@victoriaplum/deviance/dist/commands',
     ],
     custom_assertions_path: [
-        'node_modules/deviance/dist/assertions',
+        'node_modules/@victoriaplum/deviance/dist/assertions',
     ],
     selenium: {
         start_process: true,
@@ -25,11 +25,21 @@ module.exports = {
             launch_url: 'http://localhost:8069',
             desiredCapabilities: {
                 browserName: 'firefox',
+                acceptSslCerts: true,
+                javascriptEnabled: true,
+                'moz:firefoxOptions': {
+                    args: ['-headless', '-private'],
+                },
             },
         },
         chrome: {
             desiredCapabilities: {
                 browserName: 'chrome',
+                chromeOptions: {
+                    args: ['--headless', '--no-sandbox', '--incognito'],
+                },
+                acceptSslCerts: true,
+                javascriptEnabled: true,
             },
         },
     },

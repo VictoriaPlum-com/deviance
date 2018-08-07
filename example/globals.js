@@ -1,4 +1,4 @@
-const Deviance = require('deviance');
+const Deviance = require('@victoriaplum/deviance');
 
 const deviance = new Deviance({
     reporting: {
