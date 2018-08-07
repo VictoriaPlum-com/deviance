@@ -1,7 +1,7 @@
+import bodyParser from 'body-parser';
 import express from 'express';
 import exphbs from 'express-handlebars';
 import path from 'path';
-import bodyParser from 'body-parser';
 import approve from './regression-approver';
 
 export default function serve(port, results, settings) {

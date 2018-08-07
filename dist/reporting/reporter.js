@@ -1,5 +1,9 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _prompt = require('prompt/lib/prompt');
 
 var _prompt2 = _interopRequireDefault(_prompt);
@@ -14,7 +18,7 @@ var _resultsFormatter2 = _interopRequireDefault(_resultsFormatter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = {
+exports.default = {
     write: (results, settings) => {
         _prompt2.default.start({ noHandleSIGINT: true });
 
@@ -28,7 +32,6 @@ module.exports = {
             }
         };
 
-        console.log("prepromt");
         _prompt2.default.get(schema, (errors, { report }) => {
             if (errors) {
                 throw errors;

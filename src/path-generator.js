@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 
 export default function generatePaths(settings, filename, testName, testModule) {
     const name = testName.replace(/[^a-z0-9]/gi, '-');

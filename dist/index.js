@@ -1,12 +1,14 @@
 'use strict';
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _reporter = require('./reporting/reporter');
 
 var _reporter2 = _interopRequireDefault(_reporter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const path = require('path');
 
 const defaultSettings = {
     reporting: {
@@ -37,8 +39,8 @@ module.exports = class Deviance {
 
         const env = getEnvironment();
         const { expectedPath, actualPath } = this.settings.regression;
-        this.settings.regression.expectedPath = path.join(expectedPath, env);
-        this.settings.regression.actualPath = path.join(actualPath, env);
+        this.settings.regression.expectedPath = _path2.default.join(expectedPath, env);
+        this.settings.regression.actualPath = _path2.default.join(actualPath, env);
     }
 
     reporter(results, done) {
