@@ -4,3 +4,4 @@ yarn-error.log
 example/output/
 *.log
 *.swp
+*.npmrc
