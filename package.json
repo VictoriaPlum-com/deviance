@@ -4,8 +4,9 @@
     "description": "Extends NightwatchJS with a reporting tool and the ability to do visual regression assertions",
     "main": "dist/index.js",
     "scripts": {
-        "build": "babel src --out-dir dist --copy-files",
-        "watch": "babel --watch src --out-dir dist --copy-files"
+        "build": "rm -rf dist/* && babel src --out-dir dist --copy-files",
+        "watch": "babel --watch src --out-dir dist --copy-files",
+        "lint": "eslint ."
     },
     "repository": {
         "type": "git",
@@ -36,6 +37,7 @@
     },
     "homepage": "https://github.com/VictoriaPlum-com/deviance#readme",
     "dependencies": {
+        "body-parser": "^1.18.3",
         "express": "^4.16.3",
         "express-handlebars": "^3.0.0",
         "fs-extra": "^7.0.0",

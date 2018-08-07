@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test Results</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+    <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+    <style>
+        img {
+            max-width: 100%;
+        }
+        li {
+            list-style: none;
+        }
+        p.fail::before {
+            content: "✖"
+        }
+        p.success::before {
+            content: "✔"
+        }
+        p.success {
+            color: #09B257;
+        }
+        p.fail {
+            color: #FF1100;
+        }
+        .vrt-output .column {
+            border: 0.1rem solid #e1e1e1;
+        }
+        .header-container {
+            background: #6D0CA7;
+            color: white;
+            padding: 2em;
+        }
+        .header-container .button {
+            margin-right: 5px;
+        }
+        .body-container {
+            margin-top: 2em;
+        }
+        .body-container.only-passed li:not(.success),
+        .body-container.only-passed p:not(.success),
+        .body-container.only-failed li:not(.fail),
+        .body-container.only-failed p:not(.fail),
+        .body-container.only-errors li:not(.error),
+        .body-container.only-errors p:not(.error) {
+            display: none;
+        }
+        .button.button-outline-light {
+            color: #FFF;
+        }
+        .button.button-outline-light:hover {
+            color: #FFF;
+            border-color: #FFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <div class="container">
+            <h1>Deviance report</h1>
+            <header>
+                <span id="show-all" class="toggle-body-content button button-outline-light">Show All</span>
+                <span id="passed" class=" toggle-body-content button button-outline button-outline-light">{{results.passed}} passed</span>
+                <span id="errors" class="toggle-body-content button button-outline button-outline-light">{{results.errors}} errors</span>
+                <span id="failed" class="toggle-body-content button button-outline button-outline-light">{{results.failed}} failures</span>
+            </header>
+        </div>
+    </div>
+
+    <div class="container body-container">
+        {{#each results.modules}}
+            <section>
+                <h2>{{@key}} {{#if this.skipped}}<small>(skipped)</small>{{/if}}</h2>
+
+                {{#each this.completed}}
+                    <h3>{{@key}}</h3>
+
+                    <ul>
+                        {{#each this.assertions}}
+                            <li class="assertion {{#if failure}}fail{{else}}success{{/if}}">
+                                <p class="{{#if failure}}fail{{else}}success{{/if}}">
+                                    {{this.message}}
+                                </p>
+
+                                {{#if this.failure}}
+                                    <p><small>{{this.failure}}</small></p>
+                                {{/if}}
+
+                                {{#if this.stacktrace}}
+                                    <code><pre>{{this.stacktrace}}</pre></code>
+                                {{/if}}
+
+                                {{#if failure}}
+                                    <div class="row vrt-output">
+                                        {{#if filePath.expected}}
+                                            <div class="column column-33 to-remove">
+                                                <img src="{{ filePath.expected }}">
+                                            </div>
+                                        {{/if}}
+
+                                        {{#if filePath.diff}}
+                                            <div class="column column-33 to-remove">
+                                                <img src="{{ filePath.diff }}">
+                                            </div>
+                                        {{/if}}
+
+                                        {{#if filePath.actual}}
+                                            <div class="column column-33">
+                                                <img src="{{ filePath.actual }}">
+                                            </div>
+                                        {{/if}}
+                                    </div>
+                                    <div class="row">
+                                        {{#if filePath.diff}}
+                                            <div class="column column-33 column-offset-66" style="text-align:center">
+                                                <button class="i-approve" data-id="{{ id }}">Approve change</button>
+                                            </div>
+                                        {{/if}}
+                                    </div>
+                                {{/if}}
+                            </li>
+                        {{/each}}
+                    </ul>
+
+                    {{#if this.failed}}
+                        <p class="fail"> <strong>FAILED:</strong> {{this.failed}} assertions failed.</p>
+                        <p class="success"> {{this.passed}} passed. ({{this.time}}s)</p>
+                    {{else}}
+                        <p class="success"><strong>OK.</strong> {{this.passed}} assertions passed. ({{this.time}}s)</p>
+                    {{/if}}
+                {{/each}}
+
+                {{#if this.skipped}}
+                    <ul>
+                        {{#each this.skipped}}
+                            <li>{{this}} (skipped)</li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
+            </section>
+            <hr>
+        {{/each}}
+    </div>
+    <script>
+        document.querySelectorAll('.i-approve').forEach(button => {
+            const id = button.getAttribute('data-id');
+            button.addEventListener('click', () => {
+                fetch('/approve', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8",
+                    },
+                    body: JSON.stringify({id}),
+                }).then(() => {
+                    location.reload();
+                });
+            });
+        });
+
+        const bodyContainer = document.querySelector('.body-container');
+        const toggleContentSwitches = document.querySelectorAll('.toggle-body-content');
+        toggleContentSwitches.forEach(cs => {
+            cs.addEventListener('click', (e) => {
+                e.target.classList.remove('button-outline');
+                bodyContainer.classList.value = 'container body-container';
+                bodyContainer.classList.add(`only-${e.target.id}`);
+                [...e.target.parentElement.children].filter(c => c !== e.target).forEach(el => el.classList.add('button-outline'));
+            });
+        });
+    </script>
+</body>
+</html>
