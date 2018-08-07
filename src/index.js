@@ -3,8 +3,8 @@ import reporter from './reporting/reporter';
 
 const defaultSettings = {
     reporting: {
-        outputPath: 'tests_output/deviance/report',
-        openReport: false,
+        enabled: false,
+        port: 8083,
     },
     regression: {
         expectedPath: 'tests_output/deviance/regression/expected',

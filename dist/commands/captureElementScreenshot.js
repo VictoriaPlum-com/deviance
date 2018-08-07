@@ -25,47 +25,56 @@ module.exports = class CaptureElementScreenshot extends _events.EventEmitter {
         const { name: testName, module: testModule } = api.currentTest;
         const filenames = (0, _pathGenerator2.default)(settings, filename, testName, testModule);
 
-        api.getLocation(selector, ({ value: { x, y } }) => {
-            api.getElementSize(selector, ({ value: { width, height } }) => {
-                api.screenshot(false, screenshotEncoded => {
-                    const results = {};
-                    const jimpOperations = [_jimp2.default.read(Buffer.from(screenshotEncoded.value, 'base64'))];
-                    if (_fsExtra2.default.existsSync(filenames.expected)) {
-                        jimpOperations.push(_jimp2.default.read(filenames.expected));
-                    }
-
-                    Promise.all(jimpOperations).then(([actual, expected]) => {
-                        if (!(0, _helpers.hasProperty)(settings, 'hasDevianceCaptured')) {
-                            settings.hasDevianceCaptured = true;
-                            _fsExtra2.default.emptyDirSync(settings.actualPath);
+        api.execute(function inBrowser() {
+            return window.devicePixelRatio;
+        }, [], ratio => {
+            const devicePixelRatio = ratio.value;
+            api.getLocation(selector, ({ value: { x: xCoord, y: yCoord } }) => {
+                const x = Math.round(xCoord * devicePixelRatio);
+                const y = Math.round(yCoord * devicePixelRatio);
+                api.getElementSize(selector, ({ value: { width: w, height: h } }) => {
+                    const width = Math.round(w * devicePixelRatio);
+                    const height = Math.round(h * devicePixelRatio);
+                    api.screenshot(false, screenshotEncoded => {
+                        const results = {};
+                        const jimpOperations = [_jimp2.default.read(Buffer.from(screenshotEncoded.value, 'base64'))];
+                        if (_fsExtra2.default.existsSync(filenames.expected)) {
+                            jimpOperations.push(_jimp2.default.read(filenames.expected));
                         }
 
-                        actual.crop(x, y, width, height).quality(100).write(filenames.actual);
-                        results.actual = {
-                            path: filenames.actual,
-                            width: Math.round(width),
-                            height: Math.round(height)
-                        };
+                        Promise.all(jimpOperations).then(([actual, expected]) => {
+                            if (!(0, _helpers.hasProperty)(settings, 'hasDevianceCaptured')) {
+                                settings.hasDevianceCaptured = true;
+                                _fsExtra2.default.emptyDirSync(settings.actualPath);
+                            }
 
-                        if (expected) {
-                            results.expected = {
-                                path: filenames.expected,
-                                width: expected.bitmap.width,
-                                height: expected.bitmap.height
+                            actual.crop(x, y, width, height).quality(100).write(filenames.actual);
+                            results.actual = {
+                                path: filenames.actual,
+                                width,
+                                height
                             };
 
-                            const diff = _jimp2.default.diff(actual, expected);
-                            results.diff = {
-                                path: filenames.diff,
-                                percent: diff.percent
-                            };
-                            diff.image.quality(100).write(filenames.diff);
-                        }
+                            if (expected) {
+                                results.expected = {
+                                    path: filenames.expected,
+                                    width: expected.bitmap.width,
+                                    height: expected.bitmap.height
+                                };
 
-                        callback(results);
-                        this.emit('complete', results);
-                    }).catch(err => {
-                        this.emit('error', err);
+                                const diff = _jimp2.default.diff(actual, expected);
+                                results.diff = {
+                                    path: filenames.diff,
+                                    percent: diff.percent
+                                };
+                                diff.image.quality(100).write(filenames.diff);
+                            }
+
+                            callback(results);
+                            this.emit('complete', results);
+                        }).catch(err => {
+                            this.emit('error', err);
+                        });
                     });
                 });
             });

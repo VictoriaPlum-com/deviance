@@ -1,31 +1,17 @@
-import prompt from 'prompt/lib/prompt';
 import serve from './server';
 import ResultsFormatter from './results-formatter';
+import { hasProperty } from '../helpers';
 
 export default {
     write: (results, settings) => {
-        prompt.start({ noHandleSIGINT: true });
+        let reportEnabled = settings.reporting.enabled;
+        if (hasProperty(process.env, 'OPEN_REPORT')) {
+            reportEnabled = process.env.OPEN_REPORT;
+        }
 
-        const schema = {
-            properties: {
-                report: {
-                    description: 'Do you want to open generated report? (yes/no)',
-                    type: 'string',
-                    required: true,
-                },
-            },
-        };
-
-        prompt.get(schema, (errors, { report }) => {
-            if (errors) {
-                throw errors;
-            }
-
-            if (report === 'yes') {
-                const port = 8083;
-                const formatter = new ResultsFormatter(settings.regression);
-                serve(port, formatter.format(results), settings.regression);
-            }
-        });
+        if (reportEnabled) {
+            const formatter = new ResultsFormatter(settings.regression);
+            serve(settings.reporting.port, formatter.format(results), settings.regression);
+        }
     },
 };

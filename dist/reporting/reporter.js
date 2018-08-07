@@ -4,10 +4,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _prompt = require('prompt/lib/prompt');
-
-var _prompt2 = _interopRequireDefault(_prompt);
-
 var _server = require('./server');
 
 var _server2 = _interopRequireDefault(_server);
@@ -16,32 +12,20 @@ var _resultsFormatter = require('./results-formatter');
 
 var _resultsFormatter2 = _interopRequireDefault(_resultsFormatter);
 
+var _helpers = require('../helpers');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     write: (results, settings) => {
-        _prompt2.default.start({ noHandleSIGINT: true });
+        let reportEnabled = settings.reporting.enabled;
+        if ((0, _helpers.hasProperty)(process.env, 'OPEN_REPORT')) {
+            reportEnabled = process.env.OPEN_REPORT;
+        }
 
-        const schema = {
-            properties: {
-                report: {
-                    description: 'Do you want to open generated report? (yes/no)',
-                    type: 'string',
-                    required: true
-                }
-            }
-        };
-
-        _prompt2.default.get(schema, (errors, { report }) => {
-            if (errors) {
-                throw errors;
-            }
-
-            if (report === 'yes') {
-                const port = 8083;
-                const formatter = new _resultsFormatter2.default(settings.regression);
-                (0, _server2.default)(port, formatter.format(results), settings.regression);
-            }
-        });
+        if (reportEnabled) {
+            const formatter = new _resultsFormatter2.default(settings.regression);
+            (0, _server2.default)(settings.reporting.port, formatter.format(results), settings.regression);
+        }
     }
 };
