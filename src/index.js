@@ -1,6 +1,5 @@
+import path from 'path';
 import reporter from './reporting/reporter';
-
-const path = require('path');
 
 const defaultSettings = {
     reporting: {

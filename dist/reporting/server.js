@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = serve;
 
+var _bodyParser = require('body-parser');
+
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -16,10 +20,6 @@ var _expressHandlebars2 = _interopRequireDefault(_expressHandlebars);
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
-
-var _bodyParser = require('body-parser');
-
-var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
 var _regressionApprover = require('./regression-approver');
 

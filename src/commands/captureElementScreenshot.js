@@ -1,9 +1,8 @@
+import { EventEmitter } from 'events';
+import fs from 'fs-extra';
+import Jimp from 'jimp';
 import generatePaths from '../path-generator';
 import { hasProperty } from '../helpers';
-
-const { EventEmitter } = require('events');
-const Jimp = require('jimp');
-const fs = require('fs-extra');
 
 module.exports = class CaptureElementScreenshot extends EventEmitter {
     command(selector = 'body', filename = selector, callback = () => {}) {

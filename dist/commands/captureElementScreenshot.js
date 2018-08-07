@@ -1,5 +1,15 @@
 'use strict';
 
+var _events = require('events');
+
+var _fsExtra = require('fs-extra');
+
+var _fsExtra2 = _interopRequireDefault(_fsExtra);
+
+var _jimp = require('jimp');
+
+var _jimp2 = _interopRequireDefault(_jimp);
+
 var _pathGenerator = require('../path-generator');
 
 var _pathGenerator2 = _interopRequireDefault(_pathGenerator);
@@ -8,11 +18,7 @@ var _helpers = require('../helpers');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const { EventEmitter } = require('events');
-const Jimp = require('jimp');
-const fs = require('fs-extra');
-
-module.exports = class CaptureElementScreenshot extends EventEmitter {
+module.exports = class CaptureElementScreenshot extends _events.EventEmitter {
     command(selector = 'body', filename = selector, callback = () => {}) {
         const { api } = this.client;
         const { regression: settings } = api.globals.deviance;
@@ -23,15 +29,15 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
             api.getElementSize(selector, ({ value: { width, height } }) => {
                 api.screenshot(false, screenshotEncoded => {
                     const results = {};
-                    const jimpOperations = [Jimp.read(Buffer.from(screenshotEncoded.value, 'base64'))];
-                    if (fs.existsSync(filenames.expected)) {
-                        jimpOperations.push(Jimp.read(filenames.expected));
+                    const jimpOperations = [_jimp2.default.read(Buffer.from(screenshotEncoded.value, 'base64'))];
+                    if (_fsExtra2.default.existsSync(filenames.expected)) {
+                        jimpOperations.push(_jimp2.default.read(filenames.expected));
                     }
 
                     Promise.all(jimpOperations).then(([actual, expected]) => {
                         if (!(0, _helpers.hasProperty)(settings, 'hasDevianceCaptured')) {
                             settings.hasDevianceCaptured = true;
-                            fs.emptyDirSync(settings.actualPath);
+                            _fsExtra2.default.emptyDirSync(settings.actualPath);
                         }
 
                         actual.crop(x, y, width, height).quality(100).write(filenames.actual);
@@ -48,7 +54,7 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
                                 height: expected.bitmap.height
                             };
 
-                            const diff = Jimp.diff(actual, expected);
+                            const diff = _jimp2.default.diff(actual, expected);
                             results.diff = {
                                 path: filenames.diff,
                                 percent: diff.percent

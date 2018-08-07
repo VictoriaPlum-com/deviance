@@ -2,14 +2,17 @@
 
 var _helpers = require('../helpers');
 
-exports.assertion = function elementRegression(selector, settings = {}, filename = selector) {
-    this.message = `Deviance regression (pass): <${selector}> comparison passed`;
+exports.assertion = class ElementRegresses {
+    constructor(selector, settings = {}, filename = selector) {
+        this.selector = selector;
+        this.filename = filename;
+        this.message = `Deviance regression (pass): <${selector}> comparison passed`;
+        this.expected = settings.threshold || this.api.globals.deviance.regression.threshold;
+    }
 
-    this.expected = settings.threshold || this.api.globals.deviance.regression.threshold;
-
-    this.pass = data => {
+    pass(data) {
         if (!(0, _helpers.hasProperty)(data, 'expected')) {
-            this.message = `Deviance regression (new): <${selector}> recognised as new regression element`;
+            this.message = `Deviance regression (new): <${this.selector}> recognised as new regression element`;
             return true;
         }
 
@@ -17,24 +20,26 @@ exports.assertion = function elementRegression(selector, settings = {}, filename
         if (expected.width !== actual.width || expected.height !== actual.height) {
             data.message = `${actual.width}x${actual.height}`;
             this.expected = `${expected.width}x${expected.height}`;
-            this.message = `Deviance regression (fail): <${selector}> has changed dimensions`;
+            this.message = `Deviance regression (fail): <${this.selector}> has changed dimensions`;
             return false;
         }
 
         const meetsCriteria = diff.percent < this.expected;
         if (!meetsCriteria) {
-            this.message = `Deviance regression (fail): <${selector}> comparison failed`;
+            this.message = `Deviance regression (fail): <${this.selector}> comparison failed`;
             this.expected = `less than ${this.expected}`;
             data.message = `${diff.percent}`;
         }
 
         return meetsCriteria;
-    };
+    }
 
-    this.value = result => {
+    value(result) {
         result.toString = () => result.message;
         return result;
-    };
+    }
 
-    this.command = callback => this.api.captureElementScreenshot(selector, filename, callback);
+    command(callback) {
+        this.api.captureElementScreenshot(this.selector, this.filename, callback);
+    }
 };

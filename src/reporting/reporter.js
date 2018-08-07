@@ -2,7 +2,7 @@ import prompt from 'prompt/lib/prompt';
 import serve from './server';
 import ResultsFormatter from './results-formatter';
 
-module.exports = {
+export default {
     write: (results, settings) => {
         prompt.start({ noHandleSIGINT: true });
 
