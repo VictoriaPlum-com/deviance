@@ -1,3 +1,5 @@
+:warning: **Not ready for production use.** Deviance is currently in active development and as such is likely to change. Use at your own peril.
+
 # Deviance
 
 NightwatchJS reporting tool
