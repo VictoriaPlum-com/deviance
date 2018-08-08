@@ -7,4 +7,4 @@ function hasProperty(object, property) {
     return Object.prototype.hasOwnProperty.call(object, property);
 }
 
-exports.hasProperty = hasProperty;
+exports.default = hasProperty;

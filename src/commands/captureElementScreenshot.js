@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import fs from 'fs-extra';
 import Jimp from 'jimp';
 import generatePaths from '../path-generator';
-import { hasProperty } from '../helpers';
+import hasProperty from '../helpers';
 
 module.exports = class CaptureElementScreenshot extends EventEmitter {
     command(selector = 'body', filename = selector, callback = () => {}) {
