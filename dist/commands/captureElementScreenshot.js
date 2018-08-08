@@ -73,7 +73,10 @@ module.exports = class CaptureElementScreenshot extends _events.EventEmitter {
                                 diff.image.quality(100).write(filenames.diff);
                             }
 
-                            callback(results);
+                            if (typeof callback === 'function') {
+                                callback(results);
+                            }
+
                             this.emit('complete', results);
                         }).catch(err => {
                             this.emit('error', err);

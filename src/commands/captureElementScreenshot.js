@@ -62,7 +62,10 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
                                         .write(filenames.diff);
                                 }
 
-                                callback(results);
+                                if (typeof callback === 'function') {
+                                    callback(results);
+                                }
+
                                 this.emit('complete', results);
                             })
                             .catch((err) => {
