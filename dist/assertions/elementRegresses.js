@@ -8,6 +8,10 @@ exports.assertion = class ElementRegresses {
         this.filename = filename;
         this.message = `Deviance regression (pass): <${selector}> comparison passed`;
         this.expected = settings.threshold || this.api.globals.deviance.regression.threshold;
+        this.value = result => {
+            result.toString = () => result.message;
+            return result;
+        };
     }
 
     pass(data) {
@@ -32,11 +36,6 @@ exports.assertion = class ElementRegresses {
         }
 
         return meetsCriteria;
-    }
-
-    value(result) {
-        result.toString = () => result.message;
-        return result;
     }
 
     command(callback) {

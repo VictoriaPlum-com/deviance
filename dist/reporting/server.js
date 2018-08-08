@@ -21,6 +21,10 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _opn = require('opn');
+
+var _opn2 = _interopRequireDefault(_opn);
+
 var _regressionApprover = require('./regression-approver');
 
 var _regressionApprover2 = _interopRequireDefault(_regressionApprover);
@@ -29,6 +33,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function serve(port, results, settings) {
     const app = (0, _express2.default)();
+    let server;
 
     app.engine('handlebars', (0, _expressHandlebars2.default)());
 
@@ -41,6 +46,13 @@ function serve(port, results, settings) {
         res.render('index', { results });
     });
 
+    app.post('/terminate', (req, res) => {
+        res.send('Going away....');
+        server.close();
+        console.log('Report closed');
+        process.exit();
+    });
+
     app.post('/approve', (req, res) => {
         (0, _regressionApprover2.default)(results.requiresApproval[req.body.id]);
         res.send('OK');
@@ -49,7 +61,8 @@ function serve(port, results, settings) {
     app.use(`/${settings.expectedPath}`, _express2.default.static(settings.expectedPath));
     app.use(`/${settings.actualPath}`, _express2.default.static(settings.actualPath));
 
-    app.listen(port, () => {
-        console.log(`Report server listening on port: ${port}`);
+    server = app.listen(port, () => {
+        console.log('Opening closed');
+        (0, _opn2.default)(`http://localhost:${port}`);
     });
 }

@@ -2,7 +2,7 @@
 
 # Deviance
 
-NightwatchJS reporting tool
+NightwatchJS reporting tool with extended commands and assertions to perform visual regressions. 
 
 ## Contents
 
@@ -30,8 +30,8 @@ Deviance will default to the following settings:
 ```javascript
 const defaultSettings = {
     reporting: {
-        outputPath: 'tests_output/deviance/report',
-        openReport: false,
+        enabled: false,
+        port: 8083,
     },
     regression: {
         expectedPath: 'tests_output/deviance/regression/expected',
@@ -51,8 +51,7 @@ const Deviance = require('deviance');
  */
 const deviance = new Deviance({
     reporting: {
-        outputPath: 'your/report/path',
-        openReport: true,
+        enabled: true,
     },
     regression: {
         expectedPath: 'your/regression/expected/path',
@@ -77,6 +76,12 @@ You can optionally override the openReport setting by setting a node environment
 ```node
 OPEN_REPORT=false nightwatch
 ```
+
+## Running in Docker
+
+We explored using Deviance within a docker image and decided to leave some loose guidance on getting setup with Docker.
+
+We configured our base image with Firefox, Google Chrome, NodeJS, Yarn and Java. Within the image we created a volume for our application and a basic entrypoint script that would install run `yarn` followed by running NightwatchJS. As Deviance will generate some files (images for visual regression) we also created a user (`node` in our case) so any files would not be generated as root.
 
 ## Example Usage 
 

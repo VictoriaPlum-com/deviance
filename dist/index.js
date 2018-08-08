@@ -12,8 +12,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const defaultSettings = {
     reporting: {
-        outputPath: 'tests_output/deviance/report',
-        openReport: false
+        enabled: false,
+        port: 8083
     },
     regression: {
         expectedPath: 'tests_output/deviance/regression/expected',

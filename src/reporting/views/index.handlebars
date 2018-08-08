@@ -169,6 +169,15 @@
                 [...e.target.parentElement.children].filter(c => c !== e.target).forEach(el => el.classList.add('button-outline'));
             });
         });
+        window.addEventListener('unload', () => {
+            fetch('/terminate', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                body: JSON.stringify({}),
+            });
+        });
     </script>
 </body>
 </html>
