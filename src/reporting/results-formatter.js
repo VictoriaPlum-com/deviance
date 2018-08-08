@@ -17,16 +17,11 @@ export default function Formatter(settings) {
 
                     const [, fileName] = match;
 
-                    assertion.filePath = {};
-                    const possiblePaths = generatePaths(settings, fileName, testName, testModule);
-                    Object.entries(possiblePaths).forEach(([k, path]) => {
-                        if (fs.existsSync(path)) {
-                            assertion.filePath[k] = path;
-                            assertion.id = uuidv4();
+                    assertion.id = uuidv4();
+                    assertion.filePath = generatePaths(settings, fileName, testName, testModule);
+                    results.requiresApproval[assertion.id] = assertion;
 
-                            results.requiresApproval[assertion.id] = assertion;
-                        }
-                    });
+                    assertion.isNew = !fs.existsSync(assertion.filePath.diff);
                 });
             });
         });
