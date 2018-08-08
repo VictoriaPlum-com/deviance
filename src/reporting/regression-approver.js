@@ -1,15 +1,22 @@
-import fs from 'fs';
+import fs from 'fs-extra';
+import path from 'path';
 
 export default function approve(assertion) {
     const { expected, actual, diff } = assertion.filePath;
 
-    fs.unlinkSync(diff);
-    fs.unlinkSync(expected);
+    if (!assertion.isNew) {
+        fs.unlinkSync(diff);
+        fs.unlinkSync(expected);
+        assertion.filePath.diff = null;
+    }
+
+    fs.ensureDirSync(path.dirname(expected));
     fs.renameSync(actual, expected);
 
-    assertion.filePath.diff = null;
     assertion.filePath.actual = null;
     assertion.failure = false;
+    assertion.isNew = false;
 
     assertion.message.replace('(fail)', '(approved)');
+    assertion.message.replace('(new)', '(approved)');
 }

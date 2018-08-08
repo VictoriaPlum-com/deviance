@@ -94,30 +94,35 @@
 
                                 {{#if failure}}
                                     <div class="row vrt-output">
-                                        {{#if filePath.expected}}
-                                            <div class="column column-33 to-remove">
-                                                <img src="{{ filePath.expected }}">
-                                            </div>
-                                        {{/if}}
-
-                                        {{#if filePath.diff}}
-                                            <div class="column column-33 to-remove">
-                                                <img src="{{ filePath.diff }}">
-                                            </div>
-                                        {{/if}}
-
-                                        {{#if filePath.actual}}
-                                            <div class="column column-33">
-                                                <img src="{{ filePath.actual }}">
-                                            </div>
-                                        {{/if}}
+                                        <div class="column column-33 to-remove">
+                                            <img src="{{ filePath.expected }}">
+                                        </div>
+                                        <div class="column column-33 to-remove">
+                                            <img src="{{ filePath.diff }}">
+                                        </div>
+                                        <div class="column column-33">
+                                            <img src="{{ filePath.actual }}">
+                                        </div>
                                     </div>
                                     <div class="row">
-                                        {{#if filePath.diff}}
-                                            <div class="column column-33 column-offset-66" style="text-align:center">
-                                                <button class="i-approve" data-id="{{ id }}">Approve change</button>
-                                            </div>
-                                        {{/if}}
+                                        <div class="column column-33 column-offset-66" style="text-align:center">
+                                            <button class="i-approve" data-id="{{ id }}">Approve change</button>
+                                        </div>
+                                    </div>
+                                {{/if}}
+
+                                {{#if isNew}}
+                                    <div class="row vrt-output">
+                                        <div class="column column-33 to-remove"></div>
+                                        <div class="column column-33 to-remove"></div>
+                                        <div class="column column-33">
+                                            <img src="{{ filePath.actual }}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="column column-33 column-offset-66" style="text-align:center">
+                                            <button class="i-approve" data-id="{{ id }}">Approve change</button>
+                                        </div>
                                     </div>
                                 {{/if}}
                             </li>

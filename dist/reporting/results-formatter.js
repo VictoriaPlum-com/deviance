@@ -34,16 +34,11 @@ function Formatter(settings) {
 
                     const [, fileName] = match;
 
-                    assertion.filePath = {};
-                    const possiblePaths = (0, _pathGenerator2.default)(settings, fileName, testName, testModule);
-                    Object.entries(possiblePaths).forEach(([k, path]) => {
-                        if (_fs2.default.existsSync(path)) {
-                            assertion.filePath[k] = path;
-                            assertion.id = (0, _v2.default)();
+                    assertion.id = (0, _v2.default)();
+                    assertion.filePath = (0, _pathGenerator2.default)(settings, fileName, testName, testModule);
+                    results.requiresApproval[assertion.id] = assertion;
 
-                            results.requiresApproval[assertion.id] = assertion;
-                        }
-                    });
+                    assertion.isNew = !_fs2.default.existsSync(assertion.filePath.diff);
                 });
             });
         });
