@@ -26,7 +26,8 @@ module.exports = class CaptureElementScreenshot extends _events.EventEmitter {
         const filenames = (0, _pathGenerator2.default)(settings, filename, testName, testModule);
 
         api.execute(function inBrowser() {
-            return window.devicePixelRatio;
+            // eslint-disable-line
+            return window.devicePixelRatio; // eslint-disable-line
         }, [], ratio => {
             const devicePixelRatio = ratio.value;
             api.getLocation(selector, ({ value: { x: xCoord, y: yCoord } }) => {
@@ -70,7 +71,10 @@ module.exports = class CaptureElementScreenshot extends _events.EventEmitter {
                                 diff.image.quality(100).write(filenames.diff);
                             }
 
-                            callback(results);
+                            if (typeof callback === 'function') {
+                                callback(results);
+                            }
+
                             this.emit('complete', results);
                         }).catch(err => {
                             this.emit('error', err);
