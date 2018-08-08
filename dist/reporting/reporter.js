@@ -14,12 +14,14 @@ var _resultsFormatter2 = _interopRequireDefault(_resultsFormatter);
 
 var _helpers = require('../helpers');
 
+var _helpers2 = _interopRequireDefault(_helpers);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     write: (results, settings) => {
         let reportEnabled = settings.reporting.enabled;
-        if ((0, _helpers.hasProperty)(process.env, 'OPEN_REPORT')) {
+        if ((0, _helpers2.default)(process.env, 'OPEN_REPORT')) {
             reportEnabled = process.env.OPEN_REPORT;
         }
 

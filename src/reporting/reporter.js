@@ -1,6 +1,6 @@
 import serve from './server';
 import ResultsFormatter from './results-formatter';
-import { hasProperty } from '../helpers';
+import hasProperty from '../helpers';
 
 export default {
     write: (results, settings) => {
