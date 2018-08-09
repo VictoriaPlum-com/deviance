@@ -39,13 +39,17 @@
         .body-container {
             margin-top: 2em;
         }
-        .body-container.only-passed li:not(.success),
-        .body-container.only-passed p:not(.success),
-        .body-container.only-failed li:not(.fail),
-        .body-container.only-failed p:not(.fail),
-        .body-container.only-errors li:not(.error),
-        .body-container.only-errors p:not(.error) {
-            display: none;
+    
+        section {
+            padding: 40px 0;
+            border-bottom: 1px solid darkgrey;
+        }
+        .toggle-skipped {
+            margin-right: 5px;
+        }
+        label {
+            display: inline;
+            font-weight: 400;
         }
         .button.button-outline-light {
             color: #FFF;
@@ -54,6 +58,33 @@
             color: #FFF;
             border-color: #FFF;
         }
+
+        .show-passed section.success *.fail,
+        .show-passed section.success *.errors.show-errors {
+            display: none;
+        }
+
+        .show-errors section.errors *.success,
+        .show-errors section.errors *.fail,
+        .show-errors section.fail, 
+        .show-errors section.success {
+            display: none;
+        }
+
+        .show-failed section.fail *.success,
+        .show-failed section.fail *.error,
+        .show-failed section.success,
+        .show-failed section.errors {
+            display: none;
+        }
+        .show-failed section.fail,
+        .show-passed section.success,
+        .show-errors section.show-errors {
+            display: block;
+        }
+        .hide-skipped section.skipped {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -61,10 +92,14 @@
         <div class="container">
             <h1>Deviance report</h1>
             <header>
-                <span id="show-all" class="toggle-body-content button button-outline-light">Show All</span>
-                <span id="passed" class=" toggle-body-content button button-outline button-outline-light">{{results.passed}} passed</span>
+                <span id="all" class="toggle-body-content button button-outline-light">Show All</span>
+                <span id="passed" class="toggle-body-content button button-outline button-outline-light">{{results.passed}} passed</span>
                 <span id="errors" class="toggle-body-content button button-outline button-outline-light">{{results.errors}} errors</span>
                 <span id="failed" class="toggle-body-content button button-outline button-outline-light">{{results.failed}} failures</span>
+                <div class="float-right">
+                    <input id="show-skipped" type="checkbox" class="toggle-skipped" checked />
+                    <label for="show-skipped">Show skipped</label>
+                </div>
             </header>
         </div>
     </div>
@@ -138,14 +173,13 @@
                 {{/each}}
 
                 {{#if this.skipped}}
-                    <ul>
+                    <ul class="skipped">
                         {{#each this.skipped}}
                             <li>{{this}} (skipped)</li>
                         {{/each}}
                     </ul>
                 {{/if}}
             </section>
-            <hr>
         {{/each}}
     </div>
     <script>
@@ -164,13 +198,30 @@
             });
         });
 
+        const sectionElements = document.querySelectorAll('section');
+        sectionElements.forEach(section => {
+            section.childNodes.forEach(el => {
+                if (el.classList && el.classList.length > 0) {
+                    section.classList.add(el.classList.value);
+                }
+            })
+        });
+
         const bodyContainer = document.querySelector('.body-container');
+
+        const toggleSkipped = document.querySelector('#show-skipped');
+        toggleSkipped.addEventListener('change', (e) => {
+            bodyContainer.classList.toggle('hide-skipped');
+        })
+
         const toggleContentSwitches = document.querySelectorAll('.toggle-body-content');
+        const switchIds = [];
         toggleContentSwitches.forEach(cs => {
+            switchIds.push(cs.id);
             cs.addEventListener('click', (e) => {
                 e.target.classList.remove('button-outline');
-                bodyContainer.classList.value = 'container body-container';
-                bodyContainer.classList.add(`only-${e.target.id}`);
+                switchIds.forEach(sid => bodyContainer.classList.remove(`show-${sid}`));
+                bodyContainer.classList.add(`show-${e.target.id}`);
                 [...e.target.parentElement.children].filter(c => c !== e.target).forEach(el => el.classList.add('button-outline'));
             });
         });
