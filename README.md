@@ -91,7 +91,7 @@ module.exports = {
     }
 };
 ``` 
-This will also work with named selectors from pages objects e.g. `captureElementScreenshot('@selector')`.
+This will also work with named selectors from pages objects e.g. `captureElementScreenshot('@selector')`. If no parameter is supplied, it will default to the the selector `body`.
 
 The command captures the element defined by the selector and saves it to the path defined by the settings. It then checks for an expected image and performs a diff between the two. It performs **no assertions or tests** but will raise errors should they occur.
 
@@ -159,7 +159,7 @@ module.exports = {
     },
 };
 ```
-The assertion (like all NightwatchJS assertions) will work with verify and assert. It will also work with named selectors from pages objects e.g. `elementRegresses('@selector')`.
+The assertion (like all NightwatchJS assertions) will work with verify and assert. It will also work with named selectors from pages objects e.g. `elementRegresses('@selector')`. If no parameter is supplied, it will default to the the selector `body`.
 
 Internally the assertion uses the `captureElementScreenshot` command and performs some analysis on the results provided. Like the command, it can accept an optional second argument to override the filename of the generated image.
 Deviance provides a single assertion `elementRegresses`, typically it's usage would look like this:

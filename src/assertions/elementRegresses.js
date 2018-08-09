@@ -1,7 +1,7 @@
 import hasProperty from '../helpers';
 
 exports.assertion = class ElementRegresses {
-    constructor(selector, filename = selector, threshold = null) {
+    constructor(selector = 'body', filename = selector, threshold = null) {
         this.selector = selector;
         this.filename = filename;
         this.message = `Deviance regression (pass): <${selector}> comparison passed`;
