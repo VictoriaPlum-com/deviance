@@ -7,7 +7,7 @@ var _helpers2 = _interopRequireDefault(_helpers);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.assertion = class ElementRegresses {
-    constructor(selector, filename = selector, threshold = null) {
+    constructor(selector = 'body', filename = selector, threshold = null) {
         this.selector = selector;
         this.filename = filename;
         this.message = `Deviance regression (pass): <${selector}> comparison passed`;
@@ -32,7 +32,7 @@ exports.assertion = class ElementRegresses {
             return false;
         }
 
-        if (Number.isNan(this.expected)) {
+        if (Number.isNaN(this.expected)) {
             this.message = 'Deviance regression (fail): The supplied threshold parameter is not a number';
             data.message = `${typeof this.expected} ${this.expected}`;
             this.expected = 'Number between 0 and 1';

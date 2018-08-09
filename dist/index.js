@@ -8,6 +8,10 @@ var _reporter = require('./reporting/reporter');
 
 var _reporter2 = _interopRequireDefault(_reporter);
 
+var _helpers = require('./helpers');
+
+var _helpers2 = _interopRequireDefault(_helpers);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const defaultSettings = {
@@ -22,22 +26,34 @@ const defaultSettings = {
     }
 };
 
-function getEnvironment() {
+function getEnvIndex(args) {
     const envFlags = ['-e', '--env'];
-    const args = process.argv;
-    const index = args.findIndex(arg => envFlags.includes(arg)) + 1;
+    return args.findIndex(arg => envFlags.includes(arg)) + 1;
+};
 
-    return index > 0 && index < args.length ? process.argv[index] : 'default';
-}
+function getEnvironment(args) {
+    const index = getEnvIndex(args);
+
+    return index > 0 && index < args.length ? args[index] : 'default';
+};
 
 module.exports = class Deviance {
-    constructor(settings) {
+    constructor(settings = {}, args = process.argv) {
         this.settings = {};
-        Object.entries(defaultSettings).forEach(([k, v]) => {
-            this.settings[k] = Object.assign({}, v, settings[k]);
-        });
 
-        const env = getEnvironment();
+        if (settings.constructor !== Object) {
+            this.settings = defaultSettings;
+        } else {
+            Object.entries(defaultSettings).forEach(([k, v]) => {
+                if ((0, _helpers2.default)(settings, k)) {
+                    this.settings[k] = Object.assign({}, v, settings[k]);
+                } else {
+                    this.settings[k] = Object.assign({}, v);
+                }
+            });
+        }
+
+        const env = getEnvironment(args);
         const { expectedPath, actualPath } = this.settings.regression;
         this.settings.regression.expectedPath = _path2.default.join(expectedPath, env);
         this.settings.regression.actualPath = _path2.default.join(actualPath, env);
@@ -49,3 +65,6 @@ module.exports = class Deviance {
         done();
     }
 };
+
+module.exports.getEnvIndex = getEnvIndex;
+module.exports.getEnvironment = getEnvironment;

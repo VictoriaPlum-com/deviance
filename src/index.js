@@ -1,5 +1,6 @@
 import path from 'path';
 import reporter from './reporting/reporter';
+import hasProperty from './helpers';
 
 const defaultSettings = {
     reporting: {
@@ -13,22 +14,34 @@ const defaultSettings = {
     },
 };
 
-function getEnvironment() {
+function getEnvIndex(args) {
     const envFlags = ['-e', '--env'];
-    const args = process.argv;
-    const index = args.findIndex(arg => envFlags.includes(arg)) + 1;
+    return args.findIndex(arg => envFlags.includes(arg)) + 1;
+};
 
-    return (index > 0 && index < args.length) ? process.argv[index] : 'default';
-}
+function getEnvironment(args) {
+    const index = getEnvIndex(args);
+
+    return (index > 0 && index < args.length) ? args[index] : 'default';
+};
 
 module.exports = class Deviance {
-    constructor(settings) {
+    constructor(settings = {}, args = process.argv) {
         this.settings = {};
-        Object.entries(defaultSettings).forEach(([k, v]) => {
-            this.settings[k] = Object.assign({}, v, settings[k]);
-        });
 
-        const env = getEnvironment();
+        if (settings.constructor !== Object) {
+            this.settings = defaultSettings;
+        } else {
+            Object.entries(defaultSettings).forEach(([k, v]) => {
+                if (hasProperty(settings, k)) {
+                    this.settings[k] = Object.assign({}, v, settings[k]);
+                } else {
+                    this.settings[k] = Object.assign({}, v);
+                }
+            });
+        }
+        
+        const env = getEnvironment(args);
         const { expectedPath, actualPath } = this.settings.regression;
         this.settings.regression.expectedPath = path.join(expectedPath, env);
         this.settings.regression.actualPath = path.join(actualPath, env);
@@ -40,3 +53,6 @@ module.exports = class Deviance {
         done();
     }
 };
+
+module.exports.getEnvIndex = getEnvIndex;
+module.exports.getEnvironment = getEnvironment;
