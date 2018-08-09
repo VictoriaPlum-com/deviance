@@ -2,7 +2,7 @@
 
 :warning: **Not ready for production use.** Deviance is currently in active development and as such is likely to change. Use at your own peril.
 
-NightwatchJS reporting tool with extended commands and assertions to perform visual regressions. 
+Nightwatch.js reporting tool with extended commands and assertions to perform visual regressions.
 
 ## Installation
 
@@ -14,18 +14,18 @@ $ npm i --save-dev deviance
 
 ## Usage
 ### Settings
-NightwatchJS will need to be told to load in the command and assertion provided by Deviance.
-To do this add the following lines to your NightwatchJS configuration file(s):
+Nightwatch.js will need to be told to load in the command and assertion provided by Deviance.
+To do this, add the following lines to your Nightwatch.js configuration file(s):
 
 ```javascript
 custom_commands_path: [
     'node_modules/deviance/dist/commands',
 ],
-custom_commands_path: [
+custom_assertions_path: [
     'node_modules/deviance/dist/assertions',
 ],
 ```
-Note that these properties accept an array and can be used with other commands and assertions. They should sit at the same depth as `src_folders` within the configuration file. You can read more about configuration settings in the [NightwatchJS configuration documentation](http://nightwatchjs.org/gettingstarted#settings-file). 
+Note that these properties accept an array and can be used with other commands and assertions. They should sit at the same depth as `src_folders` within the configuration file. You can read more about configuration settings in the [Nightwatch.js configuration documentation](http://nightwatchjs.org/gettingstarted#settings-file).
 
 Deviance will default to the following settings:
 
@@ -42,14 +42,14 @@ const defaultSettings = {
     },
 };
 ```
-You can modify these settings from within your globals file, as is defined by `globals_path` within your NightwatchJS configuration file.
+You can modify these settings from within your globals file, as is defined by `globals_path` within your Nightwatch.js configuration file.
 
 ```javascript
 const Deviance = require('deviance');
 
 /*
  * Deviance can be constructed with settings to fit your requirements.
- * You can override just a single settings, some or all of them. 
+ * You can override just a single setting, some or all of them.
  */
 const deviance = new Deviance({
     reporting: {
@@ -63,7 +63,7 @@ const deviance = new Deviance({
 });
 
 /*
- * Then provide NightwatchJS with the Deviance settings as a global property
+ * Then provide Nightwatch.js with the Deviance settings as a global property
  * and optionally define the reporter.
  */
 module.exports = {
@@ -74,12 +74,12 @@ module.exports = {
 ```
 In the example above, the Deviance `reporter` is optional, but for Deviance to function `settings` are mandatory.
 
-You can optionally override the `enabled` setting for the report, by setting a node environment variable when running NightwatchJS.
+You can optionally override the `enabled` setting for the report, by setting a node environment variable when running Nightwatch.js:
 ```node
 OPEN_REPORT=false nightwatch
 ```
 ### Command
-Deviance provides a single command `captureElementScreenshot`, typically it's usage would look like this:
+Deviance provides a single command `captureElementScreenshot`, typically its usage would look like this:
 ```javascript
 module.exports = {
     'sample capture element image': function (browser) {
@@ -91,11 +91,11 @@ module.exports = {
     }
 };
 ``` 
-This will also work with named selectors from pages objects e.g. `captureElementScreenshot('@selector')`. If no parameter is supplied, it will default to the the selector `body`.
+This will also work with named selectors from page objects e.g. `captureElementScreenshot('@selector')`. If no parameter is supplied, it will default to the selector `body`.
 
-The command captures the element defined by the selector and saves it to the path defined by the settings. It then checks for an expected image and performs a diff between the two. It performs **no assertions or tests** but will raise errors should they occur.
+The command captures the element defined by the selector and saves it to the path defined by the settings. It then checks for an expected image and performs a diff between the two. It performs **no assertions or tests**, but will raise errors should they occur.
 
-By default the image will be named after the selector passed to it, for example `.selector` would be named `selector.png` and `img` would be called `img.png`. The path for saving images is derived from the settings defined in globals file (or the defaults mentioned above) combined with the the test group (the directory structure under test suites root) and the test name. This should hopefully prevent collision of filenames for most tests, however if you do find collision within a test (capturing an element more than once within the same test) then `captureElementScreenshot` takes an optional second argument:
+By default the image will be named after the selector passed to it, for example `.selector` would be named `selector.png` and `img` would be called `img.png`. The path for saving images is derived from the settings defined in the globals file (or the defaults mentioned above) combined with the test group (the directory structure under test suites root) and the test name. This should hopefully prevent collision of filenames for most tests, however if you do find a collision within a test (capturing an element more than once within the same test) then `captureElementScreenshot` takes an optional second argument:
 
 ```javascript
 module.exports = {
@@ -109,8 +109,8 @@ module.exports = {
             .end();
     }
 };
-``` 
-The above will now generate images called `selector_1.png`, `selector_2.png`.
+```
+The above will now generate images called `selector_1.png` and `selector_2.png`.
 
 The command will also take an optional third parameter as a function:
 ```javascript
@@ -147,7 +147,7 @@ In the above example `results` is an object with the following structure:
 }
 ```
 ### Assertion
-Deviance provides a single assertion `elementRegresses`, typically it's usage would look like this:
+Deviance provides a single assertion `elementRegresses`, typically its usage would look like this:
 ```javascript
 module.exports = {
     'sample assert element regresses': function (browser) {
@@ -159,10 +159,10 @@ module.exports = {
     },
 };
 ```
-The assertion (like all NightwatchJS assertions) will work with verify and assert. It will also work with named selectors from pages objects e.g. `elementRegresses('@selector')`. If no parameter is supplied, it will default to the the selector `body`.
+The assertion (like all Nightwatch.js assertions) will work with verify and assert. It will also work with named selectors from page objects e.g. `elementRegresses('@selector')`. If no parameter is supplied, it will default to the selector `body`.
 
-Internally the assertion uses the `captureElementScreenshot` command and performs some analysis on the results provided. Like the command, it can accept an optional second argument to override the filename of the generated image.
-Deviance provides a single assertion `elementRegresses`, typically it's usage would look like this:
+Internally the assertion uses the `captureElementScreenshot` command and performs some analysis on the results provided. Like the command, it can accept an optional second argument to override the filename of the generated image:
+
 ```javascript
 module.exports = {
     'sample assert element regresses': function (browser) {
@@ -177,7 +177,7 @@ module.exports = {
 ```
 Please read the command information above for reasoning behind this.
 
-Optionally the assertion accepts a third command in the form of a Number between 0 and 1 which allows you to override the defined threshold in the globals file (or the defaults mentioned above) for this one regression assertion. The threshold is the ratio of difference that is deemed tolerable before the test should fail.
+Optionally the assertion accepts a third command in the form of a Number between 0 and 1 which allows you to override the defined threshold in the globals file (or the defaults mentioned above) for this one regression assertion. The threshold is the ratio of difference that is deemed tolerable before the test should fail:
 ```javascript
 module.exports = {
     'sample assert element regresses': function (browser) {
@@ -188,11 +188,10 @@ module.exports = {
     },
 };
 ```
-It is advisable to use a very strict threshold for elements where there is a considerably dominant colour. Where possible though we would advise avoiding the use of the regression assertion on elements like this.   
+It is advisable to use a very strict threshold for elements where there is a considerably dominant colour. Where possible though we would advise avoiding the use of the regression assertion on elements like this.
 
 ## Running in Docker
 
-We explored using Deviance within a docker image and decided to leave some loose guidance on getting setup with Docker.
+We explored using Deviance within a Docker image and decided to leave some loose guidance on getting set up with Docker.
 
-We configured our base image with Firefox, Google Chrome, NodeJS, Yarn and Java. Within the image we created a volume for our application and a basic entrypoint script that would install run `yarn` followed by running NightwatchJS. As Deviance will generate some files (images for visual regression) we also created a user (`node` in our case) so any files would not be generated as root.
-
+We configured our base image with Firefox, Google Chrome, Node.js, Yarn and Java. Within the image we created a volume for our application and a basic entrypoint script that would run `yarn` followed by running Nightwatch.js. As Deviance will generate some files (images for visual regression) we also created a user (`node` in our case) so any files would not be generated as root.
