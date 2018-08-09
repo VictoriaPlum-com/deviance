@@ -32,7 +32,7 @@ exports.assertion = class ElementRegresses {
             return false;
         }
 
-        if (Number.isNan(this.expected)) {
+        if (Number.isNaN(this.expected)) {
             this.message = 'Deviance regression (fail): The supplied threshold parameter is not a number';
             data.message = `${typeof this.expected} ${this.expected}`;
             this.expected = 'Number between 0 and 1';
