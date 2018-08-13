@@ -10,6 +10,7 @@ export default function Formatter(settings) {
         Object.entries(results.modules).forEach(([testModule, { completed }]) => {
             Object.entries(completed).forEach(([testName, { assertions }]) => {
                 assertions.forEach((assertion) => {
+                    [assertion.message] = assertion.message.split(' - expected');
                     const match = assertion.fullMsg.match(re);
                     if (match === null) {
                         return;
