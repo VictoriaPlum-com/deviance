@@ -116,35 +116,33 @@
                         {{#each this.assertions}}
                             <li class="assertion {{#if failure}}fail{{else}}success{{/if}}">
                                 <p class="{{#if failure}}fail{{else}}success{{/if}}">
-                                    {{this.message}}
+                                    {{this.message}} {{#if this.failure}} - {{this.failure}}{{/if}}
                                 </p>
-
-                                {{#if this.failure}}
-                                    <p><small>{{this.failure}}</small></p>
-                                {{/if}}
 
                                 {{#if this.stacktrace}}
                                     <code><pre>{{this.stacktrace}}</pre></code>
                                 {{/if}}
 
                                 {{#if failure}}
-                                    <div class="row vrt-output">
-                                        <div class="column column-33 to-remove">
-                                            <img src="{{ filePath.expected }}">
+                                     {{#if filePath.diff}}
+                                        <div class="row vrt-output">
+                                            <div class="column column-33 to-remove">
+                                                <img src="{{ filePath.expected }}">
+                                            </div>
+                                            <div class="column column-33 to-remove">
+                                                <img src="{{ filePath.diff }}">
+                                            </div>
+                                            <div class="column column-33">
+                                                <img src="{{ filePath.actual }}">
+                                            </div>
                                         </div>
-                                        <div class="column column-33 to-remove">
-                                            <img src="{{ filePath.diff }}">
+                                        <div class="row">
+                                            <div class="column column-33 column-offset-66" style="text-align:center">
+                                                <button class="i-approve" data-id="{{ id }}">Approve change</button>
+                                            </div>
                                         </div>
-                                        <div class="column column-33">
-                                            <img src="{{ filePath.actual }}">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="column column-33 column-offset-66" style="text-align:center">
-                                            <button class="i-approve" data-id="{{ id }}">Approve change</button>
-                                        </div>
-                                    </div>
-                                {{/if}}
+                                     {{/if}}
+                                 {{/if}}
 
                                 {{#if isNew}}
                                     <div class="row vrt-output">
