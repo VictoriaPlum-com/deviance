@@ -1,4 +1,18 @@
-import hasProperty from '../src/helpers';
+import { hasProperty, getEnvironment } from '../src/helpers';
+
+describe('Given getEnvironment', () => {
+    describe('When no envFlag passed', () => {
+        it('Then returns value of default', () => {
+            expect(getEnvironment([])).toBe('default');
+        });
+    });
+
+    describe('When envFlag passed', () => {
+        it('Then returns value of passed string', () => {
+            expect(getEnvironment(['-e', 'value'])).toBe('value');
+        });
+    });
+});
 
 describe('Given hasProperty', () => {
     const mockObject = {

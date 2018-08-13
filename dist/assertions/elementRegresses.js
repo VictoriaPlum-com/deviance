@@ -2,10 +2,6 @@
 
 var _helpers = require('../helpers');
 
-var _helpers2 = _interopRequireDefault(_helpers);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 exports.assertion = class ElementRegresses {
     constructor(selector = 'body', filename = selector, threshold = null) {
         this.selector = selector;
@@ -19,7 +15,7 @@ exports.assertion = class ElementRegresses {
     }
 
     pass(data) {
-        if (!(0, _helpers2.default)(data, 'expected')) {
+        if (!(0, _helpers.hasProperty)(data, 'expected')) {
             this.message = `Deviance regression (new): <${this.selector}> recognised as new regression element`;
             return true;
         }

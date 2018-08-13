@@ -16,8 +16,6 @@ var _pathGenerator2 = _interopRequireDefault(_pathGenerator);
 
 var _helpers = require('../helpers');
 
-var _helpers2 = _interopRequireDefault(_helpers);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 module.exports = class CaptureElementScreenshot extends _events.EventEmitter {
@@ -46,7 +44,7 @@ module.exports = class CaptureElementScreenshot extends _events.EventEmitter {
                         }
 
                         Promise.all(jimpOperations).then(([actual, expected]) => {
-                            if (!(0, _helpers2.default)(settings, 'hasDevianceCaptured')) {
+                            if (!(0, _helpers.hasProperty)(settings, 'hasDevianceCaptured')) {
                                 settings.hasDevianceCaptured = true;
                                 _fsExtra2.default.emptyDirSync(settings.actualPath);
                             }

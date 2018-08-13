@@ -4,6 +4,7 @@ describe('Given ElementRegresses', () => {
     let instance;
     describe('When no selector passed', () => {
         beforeAll(() => {
+            // eslint-disable-next-line new-cap
             instance = new ElementRegresses.assertion(undefined, undefined, 0.1);
         });
         it('Then selector uses default value', () => {
@@ -19,6 +20,7 @@ describe('Given ElementRegresses', () => {
 
     describe('When setting threshold below the required range', () => {
         beforeAll(() => {
+            // eslint-disable-next-line new-cap
             instance = new ElementRegresses.assertion(undefined, undefined, -1);
         });
         it('Then the threshold should be set to the min value', () => {
@@ -28,6 +30,7 @@ describe('Given ElementRegresses', () => {
 
     describe('When setting threshold above the required range', () => {
         beforeAll(() => {
+            // eslint-disable-next-line new-cap
             instance = new ElementRegresses.assertion(undefined, undefined, 10);
         });
         it('Then the threshold should be set to the min value', () => {
@@ -41,6 +44,7 @@ describe('Given ElementRegression.pass', () => {
     let result;
     describe('When checking with new element', () => {
         beforeAll(() => {
+            // eslint-disable-next-line new-cap
             instance = new ElementRegresses.assertion(undefined, undefined, 0.1);
             const data = {
                 actual: {
@@ -61,6 +65,7 @@ describe('Given ElementRegression.pass', () => {
 
     describe('When checking element with different dimensions', () => {
         beforeAll(() => {
+            // eslint-disable-next-line new-cap
             instance = new ElementRegresses.assertion(undefined, undefined, 0.1);
             const data = {
                 actual: {
@@ -86,6 +91,7 @@ describe('Given ElementRegression.pass', () => {
 
     describe('When checking with an invalid threshold that is not a number', () => {
         beforeAll(() => {
+            // eslint-disable-next-line new-cap
             instance = new ElementRegresses.assertion(undefined, undefined, 'bob');
             const data = {
                 actual: {
@@ -115,6 +121,7 @@ describe('Given ElementRegression.pass', () => {
 
     describe('When checking element that fails comparison', () => {
         beforeAll(() => {
+            // eslint-disable-next-line new-cap
             instance = new ElementRegresses.assertion(undefined, undefined, 0.1);
             const data = {
                 actual: {
@@ -144,6 +151,7 @@ describe('Given ElementRegression.pass', () => {
 
     describe('When checking element that passes comparison', () => {
         beforeAll(() => {
+            // eslint-disable-next-line new-cap
             instance = new ElementRegresses.assertion(undefined, undefined, 0.1);
             const data = {
                 actual: {

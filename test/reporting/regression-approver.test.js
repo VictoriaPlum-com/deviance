@@ -21,9 +21,9 @@ describe('Given approve', () => {
     });
 
     afterAll(() => {
-        jest.resetAllMocks()
-    })
-    
+        jest.resetAllMocks();
+    });
+
     describe('When assertion is not new', () => {
         it('Then fs.unlinkSync should be called 2 times', () => {
             expect(fs.unlinkSync).toHaveBeenCalledTimes(2);
@@ -88,8 +88,8 @@ describe('Given approve using a new image to approve', () => {
     });
 
     afterAll(() => {
-        jest.resetAllMocks()
-    })
+        jest.resetAllMocks();
+    });
 
     describe('When assertion is new', () => {
         it('Then unlinkSync is not called', () => {
