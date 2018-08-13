@@ -1,8 +1,12 @@
 import path from 'path';
 
+function replaceNonAlphaNumeric(value) {
+    return value.replace(/[^a-z0-9]/gi, '-');
+}
+
 export default function generatePaths(settings, filename, testName, testModule) {
-    const name = testName.replace(/[^a-z0-9]/gi, '-');
-    const file = `${filename.replace(/[^a-z0-9]/gi, '-')}.png`;
+    const name = replaceNonAlphaNumeric(testName);
+    const file = `${replaceNonAlphaNumeric(filename)}.png`;
 
     return {
         expected: path.join(settings.expectedPath, testModule, name, file),

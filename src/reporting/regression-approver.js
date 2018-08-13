@@ -17,6 +17,6 @@ export default function approve(assertion) {
     assertion.failure = false;
     assertion.isNew = false;
 
-    assertion.message.replace('(fail)', '(approved)');
-    assertion.message.replace('(new)', '(approved)');
+    assertion.message = assertion.message.replace('(fail)', '(approved)');
+    assertion.message = assertion.message.replace('(new)', '(approved)');
 }

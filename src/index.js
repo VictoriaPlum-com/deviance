@@ -1,5 +1,6 @@
 import path from 'path';
 import reporter from './reporting/reporter';
+import { hasProperty, getEnvironment } from './helpers';
 
 const defaultSettings = {
     reporting: {
@@ -13,22 +14,23 @@ const defaultSettings = {
     },
 };
 
-function getEnvironment() {
-    const envFlags = ['-e', '--env'];
-    const args = process.argv;
-    const index = args.findIndex(arg => envFlags.includes(arg)) + 1;
-
-    return (index > 0 && index < args.length) ? process.argv[index] : 'default';
-}
-
 module.exports = class Deviance {
-    constructor(settings) {
+    constructor(settings = {}) {
         this.settings = {};
-        Object.entries(defaultSettings).forEach(([k, v]) => {
-            this.settings[k] = Object.assign({}, v, settings[k]);
-        });
 
-        const env = getEnvironment();
+        if (settings.constructor !== Object) {
+            this.settings = defaultSettings;
+        } else {
+            Object.entries(defaultSettings).forEach(([k, v]) => {
+                if (hasProperty(settings, k)) {
+                    this.settings[k] = Object.assign({}, v, settings[k]);
+                } else {
+                    this.settings[k] = Object.assign({}, v);
+                }
+            });
+        }
+
+        const env = getEnvironment(process.argv);
         const { expectedPath, actualPath } = this.settings.regression;
         this.settings.regression.expectedPath = path.join(expectedPath, env);
         this.settings.regression.actualPath = path.join(actualPath, env);

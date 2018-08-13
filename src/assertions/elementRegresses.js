@@ -1,4 +1,4 @@
-import hasProperty from '../helpers';
+import { hasProperty } from '../helpers';
 
 exports.assertion = class ElementRegresses {
     constructor(selector = 'body', filename = selector, threshold = null) {
