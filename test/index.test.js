@@ -43,6 +43,20 @@ describe('Given Deviance class', () => {
         });
     });
 
+    describe('When given an invalid threshold', () => {
+        const mockSettings = {
+            regression: {
+                threshold: 100,
+            },
+        };
+        const instance = () => {
+            new Deviance(mockSettings);
+        };
+        it('Then throws an error with expected message', () => {
+            expect(instance).toThrowError('Threshold requires value between 0 and 1');
+        });
+    });
+
     describe('When env const equals a value', () => {
         process.argv.push('-e', 'mockValue');
         const instance = new Deviance();

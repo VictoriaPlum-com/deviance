@@ -17,26 +17,6 @@ describe('Given ElementRegresses', () => {
             expect(instance.message).toContain('Deviance regression (pass): <body> comparison passed');
         });
     });
-
-    describe('When setting threshold below the required range', () => {
-        beforeAll(() => {
-            // eslint-disable-next-line new-cap
-            instance = new ElementRegresses.assertion(undefined, undefined, -1);
-        });
-        it('Then the threshold should be set to the min value', () => {
-            expect(instance.expected).toBe(0);
-        });
-    });
-
-    describe('When setting threshold above the required range', () => {
-        beforeAll(() => {
-            // eslint-disable-next-line new-cap
-            instance = new ElementRegresses.assertion(undefined, undefined, 10);
-        });
-        it('Then the threshold should be set to the min value', () => {
-            expect(instance.expected).toBe(1);
-        });
-    });
 });
 
 describe('Given ElementRegression.pass', () => {
@@ -89,10 +69,10 @@ describe('Given ElementRegression.pass', () => {
         });
     });
 
-    describe('When checking with an invalid threshold that is not a number', () => {
+    describe('When checking with an invalid threshold', () => {
         beforeAll(() => {
             // eslint-disable-next-line new-cap
-            instance = new ElementRegresses.assertion(undefined, undefined, 'bob');
+            instance = new ElementRegresses.assertion(undefined, undefined, -10);
             const data = {
                 actual: {
                     path: 'output/deviance/regression/actual/default/groupA/basicTest/Squirrel-test/img.png',
@@ -111,8 +91,11 @@ describe('Given ElementRegression.pass', () => {
             };
             result = instance.pass(data);
         });
-        it('Then message is set to "threshold is not a number" text', () => {
-            expect(instance.message).toBe('Deviance regression (fail): The supplied threshold parameter is not a number');
+        it('Then the expected should be "Requires number between 0 and 1"', () => {
+            expect(instance.expected).toBe('Requires number between 0 and 1');
+        });
+        it('Then message is set to "threshold is not within required range" text', () => {
+            expect(instance.message).toBe('Deviance regression (fail): The supplied threshold parameter is not between 0 and 1');
         });
         it('Then should fail', () => {
             expect(result).toBe(false);

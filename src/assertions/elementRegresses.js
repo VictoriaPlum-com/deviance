@@ -1,17 +1,11 @@
-import { hasProperty } from '../helpers';
+import { hasProperty, hasValidThreshold } from '../helpers';
 
 exports.assertion = class ElementRegresses {
     constructor(selector = 'body', filename = selector, threshold = null) {
         this.selector = selector;
         this.filename = filename;
         this.message = `Deviance regression (pass): <${selector}> comparison passed`;
-        this.expected = Math.max(
-            0,
-            Math.min(
-                1,
-                threshold || this.api.globals.deviance.regression.threshold,
-            ),
-        );
+        this.expected = threshold || this.api.globals.deviance.regression.threshold;
         this.value = (result) => {
             result.toString = () => result.message;
             return result;
@@ -32,10 +26,10 @@ exports.assertion = class ElementRegresses {
             return false;
         }
 
-        if (Number.isNaN(this.expected)) {
-            this.message = 'Deviance regression (fail): The supplied threshold parameter is not a number';
+        if (!hasValidThreshold(this.expected)) {
+            this.message = 'Deviance regression (fail): The supplied threshold parameter is not between 0 and 1';
             data.message = `${typeof this.expected} ${this.expected}`;
-            this.expected = 'Number between 0 and 1';
+            this.expected = 'Requires number between 0 and 1';
             return false;
         }
 

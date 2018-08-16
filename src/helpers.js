@@ -9,4 +9,8 @@ function hasProperty(object, property) {
     return Object.prototype.hasOwnProperty.call(object, property);
 }
 
-export { hasProperty, getEnvironment };
+function hasValidThreshold(threshold) {
+    return !(typeof threshold !== 'number' || threshold < 0 || threshold > 1);
+}
+
+export { hasProperty, getEnvironment, hasValidThreshold };
