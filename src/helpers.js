@@ -9,8 +9,12 @@ function hasProperty(object, property) {
     return Object.prototype.hasOwnProperty.call(object, property);
 }
 
+function isNightwatchApi(api, prop = 'click') {
+    return typeof api === 'object' && hasProperty(api, prop) && typeof api[prop] === 'function';
+}
+
 function hasValidThreshold(threshold) {
     return !(typeof threshold !== 'number' || threshold < 0 || threshold > 1);
 }
 
-export { hasProperty, getEnvironment, hasValidThreshold };
+export { hasProperty, getEnvironment, isNightwatchApi, hasValidThreshold };

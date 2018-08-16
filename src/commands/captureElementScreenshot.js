@@ -1,8 +1,10 @@
 import { EventEmitter } from 'events';
-import fs from 'fs-extra';
-import Jimp from 'jimp';
 import generatePaths from '../path-generator';
-import { hasProperty } from '../helpers';
+import execute from '../regression/promises/execute';
+import locationInView from '../regression/promises/locationInView';
+import elementSize from '../regression/promises/elementSize';
+import jimpifyScreenshots from '../regression/promises/jimpifyScreenshots';
+import processImages from '../regression/processImages';
 
 module.exports = class CaptureElementScreenshot extends EventEmitter {
     command(selector = 'body', filename = selector, callback = () => {}) {
@@ -10,71 +12,35 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
         const { regression: settings } = api.globals.deviance;
         const { name: testName, module: testModule } = api.currentTest;
         const filenames = generatePaths(settings, filename, testName, testModule);
+        const apiActions = [
+            execute(api),
+            locationInView(api, selector),
+            elementSize(api, selector),
+            jimpifyScreenshots(api, selector, filenames),
+        ];
 
-        api.execute(function inBrowser() { // eslint-disable-line
-            return window.devicePixelRatio; // eslint-disable-line
-        }, [], (ratio) => {
-            const devicePixelRatio = ratio.value;
-            api.getLocation(selector, ({ value: { x: xCoord, y: yCoord } }) => {
-                const x = Math.round(xCoord * devicePixelRatio);
-                const y = Math.round(yCoord * devicePixelRatio);
-                api.getElementSize(selector, ({ value: { width: w, height: h } }) => {
-                    const width = Math.round(w * devicePixelRatio);
-                    const height = Math.round(h * devicePixelRatio);
-                    api.screenshot(false, (screenshotEncoded) => {
-                        const results = {};
-                        const jimpOperations = [Jimp.read(Buffer.from(screenshotEncoded.value, 'base64'))];
-                        if (fs.existsSync(filenames.expected)) {
-                            jimpOperations.push(Jimp.read(filenames.expected));
-                        }
+        Promise
+            .all(apiActions)
+            .then(([devicePixelRatio, location, size, [actual, expected]]) => {
+                const x = Math.round(location.x * devicePixelRatio);
+                const y = Math.round(location.y * devicePixelRatio);
+                const width = Math.round(size.width * devicePixelRatio);
+                const height = Math.round(size.height * devicePixelRatio);
+                const data = {
+                    x, y, width, height, actual, expected,
+                };
+                const results = processImages(data, filenames, settings);
 
-                        Promise.all(jimpOperations)
-                            .then(([actual, expected]) => {
-                                if (!hasProperty(settings, 'hasDevianceCaptured')) {
-                                    settings.hasDevianceCaptured = true;
-                                    fs.emptyDirSync(settings.actualPath);
-                                }
+                if (typeof callback === 'function') {
+                    callback(results);
+                }
 
-                                actual.crop(x, y, width, height)
-                                    .quality(100)
-                                    .write(filenames.actual);
-                                results.actual = {
-                                    path: filenames.actual,
-                                    width,
-                                    height,
-                                };
-
-                                if (expected) {
-                                    results.expected = {
-                                        path: filenames.expected,
-                                        width: expected.bitmap.width,
-                                        height: expected.bitmap.height,
-                                    };
-
-                                    const diff = Jimp.diff(actual, expected);
-                                    results.diff = {
-                                        path: filenames.diff,
-                                        percent: diff.percent,
-                                    };
-                                    diff
-                                        .image
-                                        .quality(100)
-                                        .write(filenames.diff);
-                                }
-
-                                if (typeof callback === 'function') {
-                                    callback(results);
-                                }
-
-                                this.emit('complete', results);
-                            })
-                            .catch((err) => {
-                                this.emit('error', err);
-                            });
-                    });
-                });
+                this.emit('complete');
+            })
+            .catch((err) => {
+                this.emit('error');
+                throw new Error(err);
             });
-        });
 
         return this;
     }
