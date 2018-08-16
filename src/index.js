@@ -1,6 +1,6 @@
 import path from 'path';
 import reporter from './reporting/reporter';
-import { hasProperty, getEnvironment } from './helpers';
+import { hasProperty, getEnvironment, hasValidThreshold } from './helpers';
 
 const defaultSettings = {
     reporting: {
@@ -11,6 +11,7 @@ const defaultSettings = {
         expectedPath: 'tests_output/deviance/regression/expected',
         actualPath: 'tests_output/deviance/regression/actual',
         threshold: 0.05,
+        resizeAdjustment: 0,
     },
 };
 
@@ -31,7 +32,7 @@ module.exports = class Deviance {
         }
 
         const { threshold } = this.settings.regression;
-        if (typeof threshold !== 'number' || threshold < 0 || threshold > 1) {
+        if (!hasValidThreshold(threshold)) {
             throw new Error('Threshold requires value between 0 and 1');
         }
 
