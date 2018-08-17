@@ -35,11 +35,19 @@ function Formatter(settings) {
 
                     const [, fileName] = match;
 
-                    assertion.id = (0, _v2.default)();
-                    assertion.filePath = (0, _pathGenerator2.default)(settings, fileName, testName, testModule);
-                    results.requiresApproval[assertion.id] = assertion;
+                    assertion.devianceId = (0, _v2.default)();
+                    assertion.devianceFilePath = (0, _pathGenerator2.default)(settings, fileName, testName, testModule);
 
-                    assertion.isNew = !_fs2.default.existsSync(assertion.filePath.diff);
+                    assertion.isPassedDeviance = false;
+                    const diffExists = _fs2.default.existsSync(assertion.devianceFilePath.diff);
+                    if (!assertion.failure && diffExists) {
+                        assertion.isPassedDeviance = true;
+                        assertion.isNewDeviance = false;
+                        return;
+                    }
+
+                    results.requiresApproval[assertion.devianceId] = assertion;
+                    assertion.isNewDeviance = !diffExists;
                 });
             });
         });
