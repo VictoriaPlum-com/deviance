@@ -14,5 +14,10 @@ function hasProperty(object, property) {
     return Object.prototype.hasOwnProperty.call(object, property);
 }
 
+function hasValidThreshold(threshold) {
+    return !(typeof threshold !== 'number' || threshold < 0 || threshold > 1);
+}
+
 exports.hasProperty = hasProperty;
 exports.getEnvironment = getEnvironment;
+exports.hasValidThreshold = hasValidThreshold;

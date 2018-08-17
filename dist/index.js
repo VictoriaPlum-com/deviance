@@ -40,6 +40,11 @@ module.exports = class Deviance {
             });
         }
 
+        const { threshold } = this.settings.regression;
+        if (typeof threshold !== 'number' || threshold < 0 || threshold > 1) {
+            throw new Error('Threshold requires value between 0 and 1');
+        }
+
         const env = (0, _helpers.getEnvironment)(process.argv);
         const { expectedPath, actualPath } = this.settings.regression;
         this.settings.regression.expectedPath = _path2.default.join(expectedPath, env);
