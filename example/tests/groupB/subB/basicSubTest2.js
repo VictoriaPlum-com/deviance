@@ -5,10 +5,12 @@ module.exports = {
             .waitForElementPresent('body', 1000)
             .expect.element('h1').text.to.equal('Squirrel');
     },
-    'Squirrel test 2': function squirrelTest(browser) {
+    'Forced error test': function grasshopperTest(browser) {
         browser
-            .url(`${browser.launchUrl}/squirrel.html`)
+            .url(`${browser.launchUrl}/grasshopper.html`)
             .waitForElementPresent('body', 1000)
-            .expect.element('h1').text.to.equal('Squirrel');
+            .expect.element('h1').text.to.equal('Grasshopper')
+            // intentional error
+            .elementRegresses('img');
     },
 };

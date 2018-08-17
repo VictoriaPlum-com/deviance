@@ -1,8 +1,11 @@
 module.exports = {
-    'Squirrel test': function squirrelTest(browser) {
+    'New Goat test': function goatTest(browser) {
         browser
-            .url(`${browser.launchUrl}/squirrel.html`)
+            .url(`${browser.launchUrl}/goat.html`)
             .waitForElementPresent('body', 1000)
-            .expect.element('h1').text.to.equal('Squirrel');
+            .expect.element('h1').text.to.equal('Goat');
+        browser
+            .verify.elementRegresses('img')
+            .verify.elementRegresses('body');
     },
 };

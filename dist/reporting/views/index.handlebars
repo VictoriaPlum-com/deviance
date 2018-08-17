@@ -107,49 +107,49 @@
     <div class="container body-container">
         {{#each results.modules}}
             <section>
-                <h2>{{@key}} {{#if this.skipped}}<small>(skipped)</small>{{/if}}</h2>
+                <h2>{{@key}} {{#if skipped}}<small>(skipped)</small>{{/if}}</h2>
 
-                {{#each this.completed}}
+                {{#each completed}}
                     <h3>{{@key}}</h3>
 
                     <ul>
-                        {{#each this.assertions}}
+                        {{#each assertions}}
                             <li class="assertion {{#if failure}}fail{{else}}success{{/if}}">
                                 <p class="{{#if failure}}fail{{else}}success{{/if}}">
-                                    {{this.message}} {{#if this.failure}} - {{this.failure}}{{/if}}
+                                    {{message}} {{#if failure}} - {{failure}}{{/if}}
                                 </p>
 
-                                {{#if this.stacktrace}}
-                                    <code><pre>{{this.stacktrace}}</pre></code>
+                                {{#if stacktrace}}
+                                    <code><pre>{{stacktrace}}</pre></code>
                                 {{/if}}
 
                                 {{#if failure}}
-                                     {{#if filePath.diff}}
+                                     {{#if devianceFilePath.diff}}
                                         <div class="row vrt-output">
                                             <div class="column column-33 to-remove">
-                                                <img src="{{ filePath.expected }}">
+                                                <img src="{{ devianceFilePath.expected }}">
                                             </div>
                                             <div class="column column-33 to-remove">
-                                                <img src="{{ filePath.diff }}">
+                                                <img src="{{ devianceFilePath.diff }}">
                                             </div>
                                             <div class="column column-33">
-                                                <img src="{{ filePath.actual }}">
+                                                <img src="{{ devianceFilePath.actual }}">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="column column-33 column-offset-66" style="text-align:center">
-                                                <button class="i-approve" data-id="{{ id }}">Approve change</button>
+                                                <button class="i-approve" data-id="{{ devianceId }}">Approve change</button>
                                             </div>
                                         </div>
                                      {{/if}}
                                  {{/if}}
 
-                                {{#if isNew}}
+                                {{#if isNewDeviance}}
                                     <div class="row vrt-output">
                                         <div class="column column-33 to-remove"></div>
                                         <div class="column column-33 to-remove"></div>
                                         <div class="column column-33">
-                                            <img src="{{ filePath.actual }}">
+                                            <img src="{{ devianceFilePath.actual }}">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -158,21 +158,35 @@
                                         </div>
                                     </div>
                                 {{/if}}
+
+                                {{#if isPassedDeviance}}
+                                    <div class="row vrt-output">
+                                        <div class="column column-33 to-remove">
+                                            <img src="{{ devianceFilePath.expected }}">
+                                        </div>
+                                        <div class="column column-33 to-remove">
+                                            <img src="{{ devianceFilePath.diff }}">
+                                        </div>
+                                        <div class="column column-33">
+                                            <img src="{{ devianceFilePath.actual }}">
+                                        </div>
+                                    </div>
+                                {{/if}}
                             </li>
                         {{/each}}
                     </ul>
 
-                    {{#if this.failed}}
-                        <p class="fail"> <strong>FAILED:</strong> {{this.failed}} assertions failed.</p>
-                        <p class="success"> {{this.passed}} passed. ({{this.time}}s)</p>
+                    {{#if failed}}
+                        <p class="fail"> <strong>FAILED:</strong> {{failed}} assertions failed.</p>
+                        <p class="success"> {{passed}} passed. ({{time}}s)</p>
                     {{else}}
-                        <p class="success"><strong>OK.</strong> {{this.passed}} assertions passed. ({{this.time}}s)</p>
+                        <p class="success"><strong>OK.</strong> {{passed}} assertions passed. ({{time}}s)</p>
                     {{/if}}
                 {{/each}}
 
-                {{#if this.skipped}}
+                {{#if skipped}}
                     <ul class="skipped">
-                        {{#each this.skipped}}
+                        {{#each skipped}}
                             <li>{{this}} (skipped)</li>
                         {{/each}}
                     </ul>

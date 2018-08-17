@@ -18,11 +18,20 @@ export default function Formatter(settings) {
 
                     const [, fileName] = match;
 
-                    assertion.id = uuidv4();
-                    assertion.filePath = generatePaths(settings, fileName, testName, testModule);
-                    results.requiresApproval[assertion.id] = assertion;
+                    assertion.devianceId = uuidv4();
+                    assertion.devianceFilePath =
+                        generatePaths(settings, fileName, testName, testModule);
 
-                    assertion.isNew = !fs.existsSync(assertion.filePath.diff);
+                    assertion.isPassedDeviance = false;
+                    const diffExists = fs.existsSync(assertion.devianceFilePath.diff);
+                    if (!assertion.failure && diffExists) {
+                        assertion.isPassedDeviance = true;
+                        assertion.isNewDeviance = false;
+                        return;
+                    }
+
+                    results.requiresApproval[assertion.devianceId] = assertion;
+                    assertion.isNewDeviance = !diffExists;
                 });
             });
         });
