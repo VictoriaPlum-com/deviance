@@ -20,8 +20,7 @@ const defaultSettings = {
     regression: {
         expectedPath: 'tests_output/deviance/regression/expected',
         actualPath: 'tests_output/deviance/regression/actual',
-        threshold: 0.05,
-        resizeAdjustment: 0
+        threshold: 0.05
     }
 };
 
@@ -42,7 +41,7 @@ module.exports = class Deviance {
         }
 
         const { threshold } = this.settings.regression;
-        if (!(0, _helpers.hasValidThreshold)(threshold)) {
+        if (typeof threshold !== 'number' || threshold < 0 || threshold > 1) {
             throw new Error('Threshold requires value between 0 and 1');
         }
 

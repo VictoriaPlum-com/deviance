@@ -39,7 +39,6 @@ const defaultSettings = {
         expectedPath: 'tests_output/deviance/regression/expected',
         actualPath: 'tests_output/deviance/regression/actual',
         threshold: 0.05,
-        resizeAdjustment: 0,
     },
 };
 ```
@@ -79,10 +78,8 @@ You can optionally override the `enabled` setting for the report, by setting a n
 ```node
 OPEN_REPORT=false nightwatch
 ```
-### Commands
-Deviance provides two commands `captureElementScreenshot` and `resizeBrowserToBodyHeight`.
-#### `captureElementScreenshot`
-Typical usage would look like this:
+### Command
+Deviance provides a single command `captureElementScreenshot`, typically its usage would look like this:
 ```javascript
 module.exports = {
     'sample capture element image': function (browser) {
@@ -149,41 +146,6 @@ In the above example `results` is an object with the following structure:
     },
 }
 ```
-#### `resizeBrowserToBodyHeight`
-Is a basic command that can take one optional parameter `adjustment`.
-
-As native screenshots only capture the visible viewport area, this increases the browser height to match the full body modified by any `adjustment` value provided. This should allow large elements to be fully captured, including the body element.
-
-It was a conscious decision to leave width out of this command given that sites are likely to be responsive or adaptive, and even if not then running Nightwatch.js on a fixed width layout would require some basic browser width setup during configuration.
-
-You would simple call the command before running `elementRegresses`.
-
-```javascript
-module.exports = {
-    'sample capture element image': function (browser) {
-        browser
-            .url('http://app.host')
-            .waitForElementVisible('body')
-            .resizeBrowserToBodyHeight()
-            .elementRegresses('body')
-            .end();
-    }
-};
-```
-`adjustment` has been provided to allow for manual corrections to the resize height, perhaps to fix an instance where an absolute or fixed position element overlays some of the body. This value can be defined within the global settings and/or individually overridden in the test.
-```javascript
-module.exports = {
-    'sample capture element image': function (browser) {
-        browser
-            .url('http://app.host')
-            .waitForElementVisible('body')
-            .resizeBrowserToBodyHeight(64)
-            .elementRegresses('body')
-            .end();
-    }
-};
-```
-
 ### Assertion
 Deviance provides a single assertion `elementRegresses`, typically its usage would look like this:
 ```javascript
