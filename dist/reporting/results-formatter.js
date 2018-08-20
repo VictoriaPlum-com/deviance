@@ -13,6 +13,10 @@ var _v = require('uuid/v4');
 
 var _v2 = _interopRequireDefault(_v);
 
+var _ansi_up = require('ansi_up');
+
+var _ansi_up2 = _interopRequireDefault(_ansi_up);
+
 var _pathGenerator = require('../path-generator');
 
 var _pathGenerator2 = _interopRequireDefault(_pathGenerator);
@@ -20,11 +24,14 @@ var _pathGenerator2 = _interopRequireDefault(_pathGenerator);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function Formatter(settings) {
+    const ansiUp = new _ansi_up2.default();
+
     function format(results) {
         results.requiresApproval = [];
 
         const re = /Deviance regression .*{(.*)}/;
-        Object.entries(results.modules).forEach(([testModule, { completed }]) => {
+        Object.entries(results.modules).forEach(([testModule, { completed, errmessages }]) => {
+            results.modules[testModule].htmlErrorMsgs = [];
             Object.entries(completed).forEach(([testName, { assertions }]) => {
                 assertions.forEach(assertion => {
                     [assertion.message] = assertion.message.split(' - expected');
@@ -53,6 +60,13 @@ function Formatter(settings) {
                     assertion.isNewDeviance = !diffExists;
                 });
             });
+
+            if (errmessages) {
+                errmessages.forEach(message => {
+                    const htmlErrorMessage = ansiUp.ansi_to_html(message);
+                    results.modules[testModule].htmlErrorMsgs.push(htmlErrorMessage);
+                });
+            }
         });
 
         return results;

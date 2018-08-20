@@ -39,6 +39,7 @@
     },
     "homepage": "https://github.com/VictoriaPlum-com/deviance#readme",
     "dependencies": {
+        "ansi_up": "^3.0.0",
         "body-parser": "^1.18.3",
         "express": "^4.16.3",
         "express-handlebars": "^3.0.0",

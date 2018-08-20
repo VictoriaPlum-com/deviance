@@ -46,6 +46,10 @@ ansi-styles@^3.2.0, ansi-styles@^3.2.1:
   dependencies:
     color-convert "^1.9.0"
 
+ansi_up@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/ansi_up/-/ansi_up-3.0.0.tgz#27f45d8f457d9ceff59e4ea03c8e6f13c1a303e8"
+
 array-filter@~0.0.0:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/array-filter/-/array-filter-0.0.1.tgz#7da8cf2e26628ed732803581fd21f67cacd2eeec"
@@ -429,6 +433,7 @@ destroy@~1.0.4:
 deviance@./..:
   version "1.0.0"
   dependencies:
+    ansi_up "^3.0.0"
     body-parser "^1.18.3"
     express "^4.16.3"
     express-handlebars "^3.0.0"
