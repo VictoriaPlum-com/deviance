@@ -8,12 +8,12 @@ let mockData;
 describe('Given approve', () => {
     beforeAll(() => {
         mockData = {
-            filePath: {
+            devianceFilePath: {
                 expected: 'mock/expected/file/path/img.png',
                 actual: 'mock/actual/file/path/img.png',
                 diff: 'mock/diff/file/path/img.png',
             },
-            isNew: false,
+            isNewDeviance: false,
             failure: null,
             message: 'mock message (fail)',
         };
@@ -36,8 +36,8 @@ describe('Given approve', () => {
             expect(fs.unlinkSync).toHaveBeenCalledWith('mock/expected/file/path/img.png');
         });
 
-        it('Then sets diff filePath to null', () => {
-            expect(mockData.filePath.diff).toBeNull();
+        it('Then sets diff devianceFilePath to null', () => {
+            expect(mockData.devianceFilePath.diff).toBeNull();
         });
     });
 
@@ -58,8 +58,8 @@ describe('Given approve', () => {
             expect(fs.renameSync).toBeCalledWith('mock/actual/file/path/img.png', 'mock/expected/file/path/img.png');
         });
 
-        it('Then sets actual filePath to null', () => {
-            expect(mockData.filePath.actual).toBeNull();
+        it('Then sets actual devianceFilePath to null', () => {
+            expect(mockData.devianceFilePath.actual).toBeNull();
         });
 
         it('Then failure is set to false ', () => {
@@ -75,12 +75,12 @@ describe('Given approve', () => {
 describe('Given approve using a new image to approve', () => {
     beforeAll(() => {
         mockData = {
-            filePath: {
+            devianceFilePath: {
                 expected: '',
                 actual: 'mock/actual/file/path/img.png',
                 diff: '',
             },
-            isNew: true,
+            isNewDeviance: true,
             failure: null,
             message: 'mock message (new)',
         };
@@ -96,8 +96,8 @@ describe('Given approve using a new image to approve', () => {
             expect(fs.unlinkSync).not.toHaveBeenCalled();
         });
 
-        it('Then isNew should be set to false', () => {
-            expect(mockData.isNew).toBe(false);
+        it('Then isNewDeviance should be set to false', () => {
+            expect(mockData.isNewDeviance).toBe(false);
         });
 
         it('Then message text "(new)" is replaced with "(approved)"', () => {
