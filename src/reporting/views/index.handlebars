@@ -13,6 +13,12 @@
         li {
             list-style: none;
         }
+        li.approved p.success {
+            margin-bottom: 5px;
+        }
+        li.approved .row {
+            display: none;
+        }
         p.fail::before {
             content: "✖"
         }
@@ -24,6 +30,10 @@
         }
         p.fail {
             color: #FF1100;
+        }
+        p.approval-msg {
+            color: #6D0CA7;
+            margin-left: 2em;
         }
         .vrt-output .column {
             border: 0.1rem solid #e1e1e1;
@@ -114,7 +124,7 @@
 
                     <ul>
                         {{#each assertions}}
-                            <li class="assertion {{#if failure}}fail{{else}}success{{/if}}">
+                            <li class="assertion {{#if failure}}fail{{else}}success{{/if}}" id="section-{{devianceId}}">
                                 <p class="{{#if failure}}fail{{else}}success{{/if}}">
                                     {{message}} {{#if failure}} - {{failure}}{{/if}}
                                 </p>
@@ -205,7 +215,12 @@
                     },
                     body: JSON.stringify({id}),
                 }).then(() => {
-                    location.reload();
+                    const approvedSection = document.getElementById(`section-${id}`);
+                    approvedSection.classList.add('approved');
+                    const approvalMsg = document.createElement('p');
+                    approvalMsg.classList.add('approval-msg');
+                    approvalMsg.innerHTML = '✔ Visual change accepted';
+                    approvedSection.appendChild(approvalMsg);
                 });
             });
         });
@@ -237,7 +252,10 @@
                 [...e.target.parentElement.children].filter(c => c !== e.target).forEach(el => el.classList.add('button-outline'));
             });
         });
-        window.addEventListener('unload', () => {
+        
+        window.addEventListener('unload', terminateServer);
+
+        function terminateServer() {
             fetch('/terminate', {
                 method: "POST",
                 headers: {
@@ -245,7 +263,7 @@
                 },
                 body: JSON.stringify({}),
             });
-        });
+        };
     </script>
 </body>
 </html>
