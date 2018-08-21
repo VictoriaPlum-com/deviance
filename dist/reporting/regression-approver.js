@@ -16,20 +16,20 @@ var _path2 = _interopRequireDefault(_path);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function approve(assertion) {
-    const { expected, actual, diff } = assertion.filePath;
+    const { expected, actual, diff } = assertion.devianceFilePath;
 
-    if (!assertion.isNew) {
+    if (!assertion.isNewDeviance) {
         _fsExtra2.default.unlinkSync(diff);
         _fsExtra2.default.unlinkSync(expected);
-        assertion.filePath.diff = null;
+        assertion.devianceFilePath.diff = null;
     }
 
     _fsExtra2.default.ensureDirSync(_path2.default.dirname(expected));
     _fsExtra2.default.renameSync(actual, expected);
 
-    assertion.filePath.actual = null;
+    assertion.devianceFilePath.actual = null;
     assertion.failure = false;
-    assertion.isNew = false;
+    assertion.isNewDeviance = false;
 
     assertion.message = assertion.message.replace('(fail)', '(approved)');
     assertion.message = assertion.message.replace('(new)', '(approved)');
