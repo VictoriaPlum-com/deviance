@@ -23,7 +23,7 @@ function Formatter(settings) {
     function format(results) {
         results.requiresApproval = [];
 
-        const re = /Deviance regression .*<(.*)>/;
+        const re = /Deviance regression .*{(.*)}/;
         Object.entries(results.modules).forEach(([testModule, { completed }]) => {
             Object.entries(completed).forEach(([testName, { assertions }]) => {
                 assertions.forEach(assertion => {
@@ -35,6 +35,8 @@ function Formatter(settings) {
                     }
 
                     const [, fileName] = match;
+
+                    assertion.message = assertion.message.replace(/{.*}/, '');
 
                     assertion.devianceId = (0, _v2.default)();
                     assertion.devianceFilePath = (0, _pathGenerator2.default)(settings, fileName, testName, testModule);
