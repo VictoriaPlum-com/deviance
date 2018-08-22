@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-extra';
 import uuidv4 from 'uuid/v4';
 import generatePaths from '../path-generator';
 
@@ -12,6 +12,7 @@ export default function Formatter(settings) {
                 assertions.forEach((assertion) => {
                     [assertion.message] = assertion.message.split(' - expected');
                     const match = assertion.fullMsg.match(re);
+
                     if (match === null) {
                         return;
                     }
