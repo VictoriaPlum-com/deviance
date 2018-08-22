@@ -3,6 +3,7 @@
 <head>
     <title>Test Results</title>
     <meta charset="utf-8">
+    <link rel="shortcut icon" href="">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
     <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
@@ -24,6 +25,9 @@
         }
         p.success::before {
             content: "✔"
+        }
+        p.errors::before {
+            content: "!"
         }
         p.success {
             color: #09B257;
@@ -89,11 +93,17 @@
         }
         .show-failed section.fail,
         .show-passed section.success,
-        .show-errors section.show-errors {
+        .show-errors section.errors {
             display: block;
         }
         .hide-skipped section.skipped {
             display: none;
+        }
+        .error-msg {
+            padding: .75rem 1.25rem;
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
         }
     </style>
 </head>
@@ -118,6 +128,17 @@
         {{#each results.modules}}
             <section>
                 <h2>{{@key}} {{#if skipped}}<small>(skipped)</small>{{/if}}</h2>
+
+                {{#if htmlErrorMsgs}}
+                    <h4 class="errors">The following errors have occured and need addressing for all tests to run: </h4>
+                    <ul>
+                        {{#each htmlErrorMsgs}}
+                        <li class="error-msg">
+                            {{{ this }}}
+                        </li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
 
                 {{#each completed}}
                     <h3>{{@key}}</h3>
@@ -186,9 +207,15 @@
                         {{/each}}
                     </ul>
 
+                    
+
                     {{#if failed}}
                         <p class="fail"> <strong>FAILED:</strong> {{failed}} assertions failed.</p>
                         <p class="success"> {{passed}} passed. ({{time}}s)</p>
+                    {{else if errors}}
+                        <p class="errors">
+                            <strong>Error:</strong> {{errors}} assertions failed to run.
+                        </p>
                     {{else}}
                         <p class="success"><strong>OK.</strong> {{passed}} assertions passed. ({{time}}s)</p>
                     {{/if}}

@@ -107,5 +107,38 @@ describe('Given Formatter', () => {
                 expect(fs.existsSync).toHaveBeenCalledTimes(2);
             });
         });
+
+        describe('When format function provided error messages', () => {
+            let formatResults;
+            const mockResults = {
+                modules: {
+                    mockTestSuite: {
+                        completed: {
+                            mockTestName: {
+                                assertions: [
+                                    {
+                                        message: 'Deviance regression <result> - expected something',
+                                        fullMsg: 'Deviance regression <result> - expected something',
+                                    },
+                                ],
+                            },
+                        },
+                        errmessages: ['mock error message 1'],
+                    },
+                },
+            };
+
+            beforeAll(() => {
+                formatResults = instance.format(mockResults);
+            });
+
+            afterAll(() => {
+                jest.clearAllMocks();
+            });
+
+            it('Then it returns an object', () => {
+                expect(formatResults.modules.mockTestSuite.htmlErrorMsgs[0]).toBe('mock error message 1');
+            });
+        });
     });
 });
