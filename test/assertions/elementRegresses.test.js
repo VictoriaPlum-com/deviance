@@ -42,7 +42,7 @@ describe('Given ElementRegresses', () => {
         });
 
         it('Then message is as expected', () => {
-            expect(instance.message).toContain('Deviance regression (pass): <body> comparison passed');
+            expect(instance.message).toContain('Deviance regression (pass): <body> {body} comparison passed');
         });
     });
 });
@@ -91,7 +91,7 @@ describe('Given ElementRegression.pass', () => {
         });
 
         it('Then message is set to "new element" text', () => {
-            expect(instance.message).toBe('Deviance regression (new): <body> recognised as new regression element');
+            expect(instance.message).toBe('Deviance regression (new): <body> {body} recognised as new regression element');
         });
 
         it('Then should pass', () => {
@@ -118,7 +118,7 @@ describe('Given ElementRegression.pass', () => {
         });
 
         it('Then message is set to "changed dimensions" text', () => {
-            expect(instance.message).toBe('Deviance regression (fail): <body> has changed dimensions');
+            expect(instance.message).toBe('Deviance regression (fail): <body> {body} has changed dimensions');
         });
 
         it('Then should fail', () => {
@@ -184,7 +184,7 @@ describe('Given ElementRegression.pass', () => {
         });
 
         it('Then message is set to "comparison failed" text', () => {
-            expect(instance.message).toBe('Deviance regression (fail): <body> comparison failed');
+            expect(instance.message).toBe('Deviance regression (fail): <body> {body} comparison failed');
         });
 
         it('Then should fail', () => {

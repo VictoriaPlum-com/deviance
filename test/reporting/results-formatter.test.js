@@ -57,8 +57,8 @@ describe('Given Formatter', () => {
                             mockTestName: {
                                 assertions: [
                                     {
-                                        message: 'Deviance regression <result> - expected something',
-                                        fullMsg: 'Deviance regression <result> - expected something',
+                                        message: 'Deviance regression <result> {result} - expected something',
+                                        fullMsg: 'Deviance regression <result> {result} - expected something',
                                     },
                                 ],
                             },
@@ -69,8 +69,8 @@ describe('Given Formatter', () => {
                             mockTestName2: {
                                 assertions: [
                                     {
-                                        message: 'Deviance regression <result> - expected something',
-                                        fullMsg: 'Deviance regression <result> - expected something',
+                                        message: 'Deviance regression <result> {result} - expected something',
+                                        fullMsg: 'Deviance regression <result> {result} - expected something',
                                     },
                                 ],
                             },
@@ -92,7 +92,7 @@ describe('Given Formatter', () => {
             });
 
             it('Then it removes " - expected" and following text from the message', () => {
-                expect(formatResults.modules.mockTestSuite.completed.mockTestName.assertions[0].message).toBe('Deviance regression <result>');
+                expect(formatResults.modules.mockTestSuite.completed.mockTestName.assertions[0].message).toBe('Deviance regression <result> ');
             });
 
             it('Then uuidv4 is called for each assertion', () => {

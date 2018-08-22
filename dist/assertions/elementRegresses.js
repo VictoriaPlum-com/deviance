@@ -6,7 +6,7 @@ exports.assertion = class ElementRegresses {
     constructor(selector = 'body', filename = selector, threshold = null) {
         this.selector = selector;
         this.filename = filename;
-        this.message = `Deviance regression (pass): <${selector}> comparison passed`;
+        this.message = `Deviance regression (pass): <${selector}> {${this.filename}} comparison passed`;
         this.expected = threshold || this.api.globals.deviance.regression.threshold;
         this.value = result => {
             result.toString = () => result.message;
@@ -16,7 +16,7 @@ exports.assertion = class ElementRegresses {
 
     pass(data) {
         if (!(0, _helpers.hasProperty)(data, 'expected')) {
-            this.message = `Deviance regression (new): <${this.selector}> recognised as new regression element`;
+            this.message = `Deviance regression (new): <${this.selector}> {${this.filename}} recognised as new regression element`;
             return true;
         }
 
@@ -24,7 +24,7 @@ exports.assertion = class ElementRegresses {
         if (expected.width !== actual.width || expected.height !== actual.height) {
             data.message = `${actual.width}x${actual.height}`;
             this.expected = `${expected.width}x${expected.height}`;
-            this.message = `Deviance regression (fail): <${this.selector}> has changed dimensions`;
+            this.message = `Deviance regression (fail): <${this.selector}> {${this.filename}} has changed dimensions`;
             return false;
         }
 
@@ -37,7 +37,7 @@ exports.assertion = class ElementRegresses {
 
         const meetsCriteria = diff.percent < this.expected;
         if (!meetsCriteria) {
-            this.message = `Deviance regression (fail): <${this.selector}> comparison failed`;
+            this.message = `Deviance regression (fail): <${this.selector}> {${this.filename}} comparison failed`;
             this.expected = `less than ${this.expected}`;
             data.message = `${diff.percent}`;
         }
