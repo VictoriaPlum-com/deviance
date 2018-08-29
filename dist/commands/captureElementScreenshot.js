@@ -34,7 +34,7 @@ module.exports = class CaptureElementScreenshot extends _events.EventEmitter {
         const { regression: settings } = api.globals.deviance;
         const { name: testName, module: testModule } = api.currentTest;
         const filenames = (0, _pathGenerator2.default)(settings, filename, testName, testModule);
-        const apiActions = [(0, _execute2.default)(api), (0, _locationInView2.default)(api, selector), (0, _elementSize2.default)(api, selector), (0, _jimpifyScreenshots2.default)(api, selector, filenames)];
+        const apiActions = [(0, _execute2.default)(api), (0, _locationInView2.default)(api, selector), (0, _elementSize2.default)(api, selector), (0, _jimpifyScreenshots2.default)(api, filenames)];
 
         Promise.all(apiActions).then(([devicePixelRatio, location, size, [actual, expected]]) => {
             const x = Math.round(location.x * devicePixelRatio);

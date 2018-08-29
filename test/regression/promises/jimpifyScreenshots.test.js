@@ -30,7 +30,7 @@ describe('Given Given jimpifyScreenshots ', () => {
     describe('When it is called with valid parameter', () => {
         beforeAll(() => {
             setupMocks();
-            instance = jimpifyScreenshots(mockApi, 'selector', mockFilepaths);
+            instance = jimpifyScreenshots(mockApi, mockFilepaths);
         });
 
         afterAll(() => {
@@ -59,7 +59,7 @@ describe('Given Given jimpifyScreenshots ', () => {
         beforeAll(() => {
             fs.existsSync = jest.fn(() => true);
             setupMocks();
-            instance = jimpifyScreenshots(mockApi, 'selector', mockFilepaths);
+            instance = jimpifyScreenshots(mockApi, mockFilepaths);
         });
 
         afterAll(() => {
@@ -92,26 +92,10 @@ describe('Given Given jimpifyScreenshots ', () => {
         });
     });
 
-    describe('When it is called with an invalid selector parameter', () => {
-        beforeAll(() => {
-            setupMocks();
-            instance = jimpifyScreenshots(mockApi, 100);
-        });
-
-        afterAll(() => {
-            jest.resetAllMocks();
-        });
-
-        it('Then it rejects a promise with the appropriate message', () => {
-            expect.assertions(1);
-            return expect(instance).rejects.toThrow('The provided selector must be a string');
-        });
-    });
-
     describe('When it is called with an invalid filepaths parameter', () => {
         beforeAll(() => {
             setupMocks();
-            instance = jimpifyScreenshots(mockApi, 'selector', 1);
+            instance = jimpifyScreenshots(mockApi, 1);
         });
 
         afterAll(() => {

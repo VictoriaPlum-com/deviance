@@ -16,7 +16,7 @@ module.exports = class CaptureElementScreenshot extends EventEmitter {
             execute(api),
             locationInView(api, selector),
             elementSize(api, selector),
-            jimpifyScreenshots(api, selector, filenames),
+            jimpifyScreenshots(api, filenames),
         ];
 
         Promise
