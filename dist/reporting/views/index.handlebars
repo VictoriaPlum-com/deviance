@@ -309,17 +309,16 @@
             });
         });
 
-        function terminateServer() {
-            fetch('/terminate', {
+        function keepServerAlive() {
+            fetch('/keep-alive', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
                 },
-                body: JSON.stringify({}),
             });
         }
 
-        window.addEventListener('unload', terminateServer);
+        setInterval(() => keepServerAlive(), 1000);
 
         [...document.querySelectorAll('img')].forEach((img) => {
             new Viewer(img);

@@ -31,9 +31,23 @@ var _regressionApprover2 = _interopRequireDefault(_regressionApprover);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+let server;
+let closer;
+
+function setCloser(timeout = 4000) {
+    if (closer) {
+        clearTimeout(closer);
+    }
+
+    closer = setTimeout(() => {
+        server.close();
+        console.log('Report closed');
+        process.exit();
+    }, timeout);
+}
+
 function serve(port, results, settings) {
     const app = (0, _express2.default)();
-    let server;
 
     app.engine('handlebars', (0, _expressHandlebars2.default)());
 
@@ -46,11 +60,10 @@ function serve(port, results, settings) {
         res.render('index', { results });
     });
 
-    app.post('/terminate', (req, res) => {
-        res.send('Going away....');
-        server.close();
-        console.log('Report closed');
-        process.exit();
+    setCloser();
+    app.post('/keep-alive', (req, res) => {
+        setCloser();
+        res.send('OK');
     });
 
     app.post('/approve', (req, res) => {
