@@ -34,6 +34,7 @@ export default function serve(port, results, settings) {
 
     app.use(`/${settings.expectedPath}`, express.static(settings.expectedPath));
     app.use(`/${settings.actualPath}`, express.static(settings.actualPath));
+    app.use('/viewerjs', express.static('./node_modules/viewerjs/dist'));
 
     server = app.listen(port, () => {
         console.log('Opening report');

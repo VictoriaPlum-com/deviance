@@ -60,6 +60,7 @@ function serve(port, results, settings) {
 
     app.use(`/${settings.expectedPath}`, _express2.default.static(settings.expectedPath));
     app.use(`/${settings.actualPath}`, _express2.default.static(settings.actualPath));
+    app.use('/viewerjs', _express2.default.static('./node_modules/viewerjs/dist'));
 
     server = app.listen(port, () => {
         console.log('Opening report');
