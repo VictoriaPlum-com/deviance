@@ -4,10 +4,11 @@ var _helpers = require('../helpers');
 
 exports.assertion = class ElementRegresses {
     constructor(selector = 'body', filename = selector, threshold = null) {
-        this.selector = selector;
-        this.filename = filename;
-        this.message = `Deviance regression (pass): <${selector}> {${this.filename}} comparison passed`;
-        this.expected = threshold || this.api.globals.deviance.regression.threshold;
+        const { threshold: globalThreshold } = this.api.globals.deviance.regression;
+        this.selector = (0, _helpers.handleElement)(selector);
+        this.filename = (0, _helpers.handleElement)(filename);
+        this.message = `Deviance regression (pass): <${this.selector}> {${this.filename}} comparison passed`;
+        this.expected = threshold === null ? globalThreshold : threshold;
         this.value = result => {
             result.toString = () => result.message;
             return result;
@@ -35,10 +36,10 @@ exports.assertion = class ElementRegresses {
             return false;
         }
 
-        const meetsCriteria = diff.percent < this.expected;
+        const meetsCriteria = diff.percent <= this.expected;
         if (!meetsCriteria) {
             this.message = `Deviance regression (fail): <${this.selector}> {${this.filename}} comparison failed`;
-            this.expected = `less than ${this.expected}`;
+            this.expected = `less than or equal to ${this.expected}`;
             data.message = `${diff.percent}`;
         }
 

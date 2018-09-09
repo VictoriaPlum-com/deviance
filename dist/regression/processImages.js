@@ -19,7 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function processImages(data, filenames, settings) {
     const {
-        x, y, width, height, actual, expected
+        left, top, width, height, expected, actual
     } = data;
     const results = {};
 
@@ -28,7 +28,7 @@ function processImages(data, filenames, settings) {
         _fsExtra2.default.emptyDirSync(settings.actualPath);
     }
 
-    actual.crop(x, y, width, height).quality(100).write(filenames.actual);
+    actual.crop(left, top, width, height).quality(100).write(filenames.actual);
     results.actual = {
         path: filenames.actual,
         width,

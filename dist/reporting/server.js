@@ -62,7 +62,7 @@ function serve(port, results, settings) {
     app.use(`/${settings.actualPath}`, _express2.default.static(settings.actualPath));
 
     server = app.listen(port, () => {
-        console.log('Opening closed');
+        console.log('Opening report');
         (0, _opn2.default)(`http://localhost:${port}`);
     });
 }
