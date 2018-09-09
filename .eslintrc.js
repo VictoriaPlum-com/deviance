@@ -21,4 +21,8 @@ module.exports = {
         'no-new': 0,
         'no-console': 0,
     },
+    'globals': {
+        'window': true,
+        'document': true,
+    },
 };

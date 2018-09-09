@@ -11,6 +11,7 @@ const defaultSettings = {
         expectedPath: 'tests_output/deviance/regression/expected',
         actualPath: 'tests_output/deviance/regression/actual',
         threshold: 0.05,
+        screenshotTimeout: 20000,
     },
 };
 

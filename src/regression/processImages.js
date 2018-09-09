@@ -4,7 +4,7 @@ import { hasProperty } from '../helpers';
 
 export default function processImages(data, filenames, settings) {
     const {
-        x, y, width, height, actual, expected,
+        left, top, width, height, expected, actual,
     } = data;
     const results = {};
 
@@ -13,7 +13,7 @@ export default function processImages(data, filenames, settings) {
         fs.emptyDirSync(settings.actualPath);
     }
 
-    actual.crop(x, y, width, height)
+    actual.crop(left, top, width, height)
         .quality(100)
         .write(filenames.actual);
     results.actual = {
@@ -42,3 +42,4 @@ export default function processImages(data, filenames, settings) {
 
     return results;
 }
+
