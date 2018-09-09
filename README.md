@@ -39,6 +39,7 @@ const defaultSettings = {
         expectedPath: 'tests_output/deviance/regression/expected',
         actualPath: 'tests_output/deviance/regression/actual',
         threshold: 0.05,
+        screenshotTimeout: 20000,
     },
 };
 ```
@@ -91,7 +92,7 @@ module.exports = {
     }
 };
 ``` 
-This will also work with named selectors from page objects e.g. `captureElementScreenshot('@selector')`. If no parameter is supplied, it will default to the selector `body`.
+This will also work with named selectors from page objects e.g. `captureElementScreenshot('@selector')`. If no parameter is supplied, it will default to the selector `body`. Any screenshot generated for the body will define it's boundaries from the document scrollWidth and scrollHeight (i.e. the full size of the document).
 
 The command captures the element defined by the selector and saves it to the path defined by the settings. It then checks for an expected image and performs a diff between the two. It performs **no assertions or tests**, but will raise errors should they occur.
 

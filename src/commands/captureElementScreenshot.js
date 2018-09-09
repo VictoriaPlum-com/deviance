@@ -1,45 +1,87 @@
+import fs from 'fs-extra';
+import Jimp from 'jimp';
 import { EventEmitter } from 'events';
 import generatePaths from '../path-generator';
-import execute from '../regression/promises/execute';
-import locationInView from '../regression/promises/locationInView';
-import elementSize from '../regression/promises/elementSize';
-import jimpifyScreenshots from '../regression/promises/jimpifyScreenshots';
+import { buildCaptureAreas, scrollAndPosition, elementAndViewportData, handleElement } from '../helpers';
 import processImages from '../regression/processImages';
 
 module.exports = class CaptureElementScreenshot extends EventEmitter {
     command(selector = 'body', filename = selector, callback = () => {}) {
+        const cleanSelector = handleElement(selector);
+        const cleanFilename = handleElement(filename);
+
         const { api } = this.client;
         const { regression: settings } = api.globals.deviance;
         const { name: testName, module: testModule } = api.currentTest;
-        const filenames = generatePaths(settings, filename, testName, testModule);
-        const apiActions = [
-            execute(api),
-            locationInView(api, selector),
-            elementSize(api, selector),
-            jimpifyScreenshots(api, filenames),
-        ];
+        const filenames = generatePaths(settings, cleanFilename, testName, testModule);
+        const { asyncHookTimeout } = this.client.settings.globals;
+        this.client.settings.globals.asyncHookTimeout = settings.screenshotTimeout;
 
-        Promise
-            .all(apiActions)
-            .then(([devicePixelRatio, location, size, [actual, expected]]) => {
-                const x = Math.round(location.x * devicePixelRatio);
-                const y = Math.round(location.y * devicePixelRatio);
-                const width = Math.round(size.width * devicePixelRatio);
-                const height = Math.round(size.height * devicePixelRatio);
-                const data = {
-                    x, y, width, height, actual, expected,
-                };
-                const results = processImages(data, filenames, settings);
+        let elementData;
+        let ratio;
+        let captureAreas;
+        let mainImage;
+        let position;
 
-                if (typeof callback === 'function') {
-                    callback(results);
+        api
+            .execute(elementAndViewportData, [cleanSelector], ({ value }) => {
+                elementData = value.element;
+                ratio = 1 / value.devicePixelRatio;
+                captureAreas = buildCaptureAreas(value.element, value.viewport);
+                const width = value.body.width / ratio;
+                const height = value.body.height / ratio;
+                mainImage = new Jimp(width, height);
+            })
+            .perform((done) => {
+                const lastIndex = captureAreas.length - 1;
+                captureAreas.forEach((scrollToOptions, index) => {
+                    const options = [JSON.stringify(scrollToOptions)];
+                    api.execute(scrollAndPosition, options, ({ value }) => {
+                        position = {
+                            left: value.left / ratio,
+                            top: value.top / ratio,
+                        };
+                    }).screenshot(false, ({ value }) => {
+                        const bufferedScreenshot = Buffer.from(value, 'base64');
+                        Jimp.read(bufferedScreenshot).then((image) => {
+                            mainImage.composite(image, position.left, position.top);
+                            if (index === lastIndex) {
+                                if (ratio !== 1) {
+                                    mainImage.scale(ratio);
+                                }
+
+                                this.client.settings.globals.asyncHookTimeout = asyncHookTimeout;
+                                done();
+                            }
+                        });
+                    });
+                });
+            })
+            .perform((done) => {
+                const operations = [];
+                if (fs.existsSync(filenames.expected)) {
+                    operations.push(Jimp.read(filenames.expected));
                 }
 
-                this.emit('complete');
-            })
-            .catch((err) => {
-                this.emit('error');
-                throw new Error(err);
+                Promise
+                    .all(operations)
+                    .then(([expected]) => {
+                        elementData.actual = mainImage;
+                        elementData.expected = expected;
+                        const result = processImages(elementData, filenames, settings);
+
+                        if (typeof callback === 'function') {
+                            callback(result);
+                        }
+
+                        this.emit('success');
+                        this.emit('complete');
+                        done();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        throw err;
+                    });
             });
 
         return this;

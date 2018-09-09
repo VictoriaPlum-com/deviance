@@ -1,12 +1,28 @@
 import assertion from '../../src/assertions/elementRegresses';
 
 const ElementRegresses = assertion.assertion;
+const mockApi = {
+    globals: {
+        deviance: {
+            regression: {
+                threshold: 0.1,
+            },
+        },
+    },
+    captureElementScreenshot: jest.fn(),
+};
+
+class TestElementRegresses extends ElementRegresses {
+    get api() { //eslint-disable-line
+        return mockApi;
+    }
+}
 
 let instance;
 let result;
 describe('Given ElementRegresses', () => {
     beforeAll(() => {
-        instance = new ElementRegresses(undefined, undefined, 0.1);
+        instance = new TestElementRegresses(undefined, undefined, 0.1);
     });
 
     it('Then is a class', () => {
@@ -14,23 +30,22 @@ describe('Given ElementRegresses', () => {
     });
 
     it('Then it implements a method "value"', () => {
-        expect(instance).toHaveProperty('value');
+        // you would usual use toHaveProperty here, but we are having to
+        // extend the class above to mock out properties of "this"
         expect(typeof instance.value).toEqual('function');
     });
 
     it('Then it implements a method "command"', () => {
-        expect(instance).toHaveProperty('command');
         expect(typeof instance.command).toEqual('function');
     });
 
     it('Then it implements a method "pass"', () => {
-        expect(instance).toHaveProperty('pass');
         expect(typeof instance.pass).toEqual('function');
     });
 
     describe('When no selector passed', () => {
         beforeAll(() => {
-            instance = new ElementRegresses(undefined, undefined, 0.1);
+            instance = new TestElementRegresses(undefined, undefined, 0.1);
         });
 
         it('Then selector uses default value', () => {
@@ -47,10 +62,10 @@ describe('Given ElementRegresses', () => {
     });
 });
 
-describe('Given ElementRegression.value', () => {
+describe('Given ElementRegresses.value', () => {
     describe('When it is provided with a parameter with property "message"', () => {
         beforeAll(() => {
-            instance = new ElementRegresses(undefined, undefined, 0.1);
+            instance = new TestElementRegresses(undefined, undefined, 0.1);
             result = instance.value({ message: 'I am a message' });
         });
 
@@ -60,13 +75,10 @@ describe('Given ElementRegression.value', () => {
     });
 });
 
-describe('Given ElementRegression.command', () => {
+describe('Given ElementRegresses.command', () => {
     describe('When it is called', () => {
         beforeAll(() => {
-            instance = new ElementRegresses(undefined, undefined, 0.1);
-            instance.api = {
-                captureElementScreenshot: jest.fn(),
-            };
+            instance = new TestElementRegresses(undefined, undefined, 0.1);
             instance.command();
         });
 
@@ -76,10 +88,10 @@ describe('Given ElementRegression.command', () => {
     });
 });
 
-describe('Given ElementRegression.pass', () => {
+describe('Given ElementRegresses.pass', () => {
     describe('When checking with new element', () => {
         beforeAll(() => {
-            instance = new ElementRegresses(undefined, undefined, 0.1);
+            instance = new TestElementRegresses(undefined, undefined, 0.1);
             const data = {
                 actual: {
                     path: 'output/deviance/regression/actual/default/groupA/basicTest/Squirrel-test/img.png',
@@ -101,7 +113,7 @@ describe('Given ElementRegression.pass', () => {
 
     describe('When checking element with different dimensions', () => {
         beforeAll(() => {
-            instance = new ElementRegresses(undefined, undefined, 0.1);
+            instance = new TestElementRegresses(undefined, undefined, 0.1);
             const data = {
                 actual: {
                     path: 'output/deviance/regression/actual/default/groupA/basicTest/Squirrel-test/img.png',
@@ -128,7 +140,7 @@ describe('Given ElementRegression.pass', () => {
 
     describe('When checking with an invalid threshold', () => {
         beforeAll(() => {
-            instance = new ElementRegresses(undefined, undefined, 'bob');
+            instance = new TestElementRegresses(undefined, undefined, 'bob');
             const data = {
                 actual: {
                     path: 'output/deviance/regression/actual/default/groupA/basicTest/Squirrel-test/img.png',
@@ -163,7 +175,7 @@ describe('Given ElementRegression.pass', () => {
 
     describe('When checking element that fails comparison', () => {
         beforeAll(() => {
-            instance = new ElementRegresses(undefined, undefined, 0.1);
+            instance = new TestElementRegresses(undefined, undefined, 0.1);
             const data = {
                 actual: {
                     path: 'output/deviance/regression/actual/default/groupA/basicTest/Squirrel-test/img.png',
@@ -194,7 +206,7 @@ describe('Given ElementRegression.pass', () => {
 
     describe('When checking element that passes comparison', () => {
         beforeAll(() => {
-            instance = new ElementRegresses(undefined, undefined, 0.1);
+            instance = new TestElementRegresses(undefined, undefined, 0.1);
             const data = {
                 actual: {
                     path: 'output/deviance/regression/actual/default/groupA/basicTest/Squirrel-test/img.png',
