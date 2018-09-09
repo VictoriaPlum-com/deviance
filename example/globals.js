@@ -7,11 +7,14 @@ const deviance = new Deviance({
     regression: {
         expectedPath: 'regression/expected',
         actualPath: 'output/deviance/regression/actual',
-        threshold: 0.001,
+        threshold: 0.1,
     },
 });
 
 module.exports = {
+    beforeEach(browser, done) {
+        browser.resizeWindow(500, 800, done);
+    },
     deviance: deviance.settings,
     reporter: deviance.reporter,
 };

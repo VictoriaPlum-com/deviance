@@ -5,6 +5,9 @@ module.exports = {
     output_folder: 'output',
     globals_path: 'globals.js',
     live_output: true,
+    page_objects_path: [
+        'page-objects',
+    ],
     custom_commands_path: [
         'node_modules/deviance/dist/commands',
     ],
