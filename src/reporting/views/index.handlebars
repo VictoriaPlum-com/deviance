@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
     <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
     <style>
+        html {
+            font-size: 62.5%;
+        }
+        body {
+            font-size: 1.6rem;
+        }
         img {
             max-width: 100%;
         }
@@ -15,13 +21,19 @@
             list-style: none;
         }
         li.approved p.success {
-            margin-bottom: 5px;
+            margin-bottom: 1.5rem;
         }
         li.approved .row {
             display: none;
         }
+        p {
+            margin: 2.5rem 0 0 0;
+        }
         p.fail::before {
             content: "✖"
+        }
+        p.approved::before {
+            content: "⚠"
         }
         p.success::before {
             content: "✔"
@@ -35,9 +47,12 @@
         p.fail {
             color: #FF1100;
         }
+        p.approved {
+            color: #FF7F50;
+        }
         p.approval-msg {
             color: #6D0CA7;
-            margin-left: 2em;
+            margin: 0 2rem;
         }
         .vrt-output .column {
             border: 0.1rem solid #e1e1e1;
@@ -45,21 +60,21 @@
         .header-container {
             background: #6D0CA7;
             color: white;
-            padding: 2em;
+            padding: 2rem;
         }
         .header-container .button {
-            margin-right: 5px;
+            margin-right: 0.5rem;
         }
         .body-container {
-            margin-top: 2em;
+            margin-top: 2rem;
         }
-    
+
         section {
-            padding: 40px 0;
-            border-bottom: 1px solid darkgrey;
+            padding: 4rem 0;
+            border-bottom: 0.1rem solid darkgrey;
         }
         .toggle-skipped {
-            margin-right: 5px;
+            margin-right: 0.5rem;
         }
         label {
             display: inline;
@@ -72,6 +87,13 @@
             color: #FFF;
             border-color: #FFF;
         }
+        .column.approve-button {
+            text-align: right;
+            padding: 0;
+        }
+        .column.approve-button button {
+            margin: 0.3rem;
+        }
 
         .show-passed section.success *.fail,
         .show-passed section.success *.errors.show-errors {
@@ -80,7 +102,7 @@
 
         .show-errors section.errors *.success,
         .show-errors section.errors *.fail,
-        .show-errors section.fail, 
+        .show-errors section.fail,
         .show-errors section.success {
             display: none;
         }
@@ -146,7 +168,7 @@
                     <ul>
                         {{#each assertions}}
                             <li class="assertion {{#if failure}}fail{{else}}success{{/if}}" id="section-{{devianceId}}">
-                                <p class="{{#if failure}}fail{{else}}success{{/if}}">
+                                <p class="{{#if failure}}fail{{else}}success{{/if}} i-can-be-approved">
                                     {{message}} {{#if failure}} - {{failure}}{{/if}}
                                 </p>
 
@@ -155,7 +177,7 @@
                                 {{/if}}
 
                                 {{#if failure}}
-                                     {{#if devianceFilePath.diff}}
+                                    {{#if devianceFilePath.diff}}
                                         <div class="row vrt-output">
                                             <div class="column column-33 to-remove">
                                                 <img src="{{ devianceFilePath.expected }}">
@@ -168,12 +190,12 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="column column-33 column-offset-66" style="text-align:center">
+                                            <div class="approve-button column column-33 column-offset-66">
                                                 <button class="i-approve" data-id="{{ devianceId }}">Approve change</button>
                                             </div>
                                         </div>
-                                     {{/if}}
-                                 {{/if}}
+                                    {{/if}}
+                                {{/if}}
 
                                 {{#if isNewDeviance}}
                                     <div class="row vrt-output">
@@ -184,7 +206,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="column column-33 column-offset-66" style="text-align:center">
+                                        <div class="approve-button column column-33 column-offset-66">
                                             <button class="i-approve" data-id="{{ devianceId }}">Approve change</button>
                                         </div>
                                     </div>
@@ -206,8 +228,6 @@
                             </li>
                         {{/each}}
                     </ul>
-
-                    
 
                     {{#if failed}}
                         <p class="fail"> <strong>FAILED:</strong> {{failed}} assertions failed.</p>
@@ -243,6 +263,13 @@
                     body: JSON.stringify({id}),
                 }).then(() => {
                     const approvedSection = document.getElementById(`section-${id}`);
+                    const state = approvedSection.getElementsByClassName('i-can-be-approved')[0];
+                    state.classList.remove('success', 'fail');
+                    state.classList.add('approved');
+                    const text = document.createTextNode(state.innerText);
+                    const del = document.createElement('del');
+                    del.appendChild(text);
+                    state.innerHTML = del.outerHTML;
                     approvedSection.classList.add('approved');
                     const approvalMsg = document.createElement('p');
                     approvalMsg.classList.add('approval-msg');
@@ -266,7 +293,7 @@
         const toggleSkipped = document.querySelector('#show-skipped');
         toggleSkipped.addEventListener('change', (e) => {
             bodyContainer.classList.toggle('hide-skipped');
-        })
+        });
 
         const toggleContentSwitches = document.querySelectorAll('.toggle-body-content');
         const switchIds = [];
@@ -279,7 +306,7 @@
                 [...e.target.parentElement.children].filter(c => c !== e.target).forEach(el => el.classList.add('button-outline'));
             });
         });
-        
+
         window.addEventListener('unload', terminateServer);
 
         function terminateServer() {
@@ -290,7 +317,7 @@
                 },
                 body: JSON.stringify({}),
             });
-        };
+        }
     </script>
 </body>
 </html>

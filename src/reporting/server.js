@@ -36,7 +36,7 @@ export default function serve(port, results, settings) {
     app.use(`/${settings.actualPath}`, express.static(settings.actualPath));
 
     server = app.listen(port, () => {
-        console.log('Opening closed');
+        console.log('Opening report');
         opn(`http://localhost:${port}`);
     });
 }
