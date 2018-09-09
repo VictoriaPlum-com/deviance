@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
     <link rel="stylesheet" href="//cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
+    <link rel="stylesheet" href="/viewerjs/viewer.min.css">
     <style>
         html {
             font-size: 62.5%;
@@ -16,6 +17,7 @@
         }
         img {
             max-width: 100%;
+            cursor: zoom-in;
         }
         li {
             list-style: none;
@@ -251,6 +253,7 @@
             </section>
         {{/each}}
     </div>
+    <script src="/viewerjs/viewer.min.js"></script>
     <script>
         document.querySelectorAll('.i-approve').forEach(button => {
             const id = button.getAttribute('data-id');
@@ -289,7 +292,6 @@
         });
 
         const bodyContainer = document.querySelector('.body-container');
-
         const toggleSkipped = document.querySelector('#show-skipped');
         toggleSkipped.addEventListener('change', (e) => {
             bodyContainer.classList.toggle('hide-skipped');
@@ -307,8 +309,6 @@
             });
         });
 
-        window.addEventListener('unload', terminateServer);
-
         function terminateServer() {
             fetch('/terminate', {
                 method: "POST",
@@ -318,6 +318,12 @@
                 body: JSON.stringify({}),
             });
         }
+
+        window.addEventListener('unload', terminateServer);
+
+        [...document.querySelectorAll('img')].forEach((img) => {
+            new Viewer(img);
+        });
     </script>
 </body>
 </html>
