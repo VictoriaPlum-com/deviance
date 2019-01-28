@@ -1,4 +1,5 @@
 module.exports = {
+    '@disabled': true,
     '@tags': ['approved'],
     'Squirrel test': function squirrelTest(browser) {
         browser

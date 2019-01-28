@@ -1,4 +1,5 @@
 module.exports = {
+    '@disabled': true,
     '@tags': ['approved'],
     'elementRegresses on large elements and the document body': function goatTest(browser) {
         browser

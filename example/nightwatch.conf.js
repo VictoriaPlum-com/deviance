@@ -27,7 +27,7 @@ module.exports = {
         default: {
             launch_url: 'http://localhost:8069',
             desiredCapabilities: {
-                browserName: 'firefox',
+                browserName: 'chrome',
             },
         },
         chrome: {

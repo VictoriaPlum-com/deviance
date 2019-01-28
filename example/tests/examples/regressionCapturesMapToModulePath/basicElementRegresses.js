@@ -1,4 +1,5 @@
 module.exports = {
+    '@disabled': true,
     '@tags': ['approved'],
     'elementRegresses working with a standard string selector': function squirrelTest(browser) {
         browser

@@ -140,6 +140,7 @@
                 <span id="passed" class="toggle-body-content button button-outline button-outline-light">{{results.passed}} passed</span>
                 <span id="errors" class="toggle-body-content button button-outline button-outline-light">{{results.errors}} errors</span>
                 <span id="failed" class="toggle-body-content button button-outline button-outline-light">{{results.failed}} failures</span>
+                <span id="terminate" class="toggle-body-content button button-outline button-outline-light">terminate</span>
                 <div class="float-right">
                     <input id="show-skipped" type="checkbox" class="toggle-skipped" checked />
                     <label for="show-skipped">Show skipped</label>
@@ -310,6 +311,8 @@
         });
 
         function terminateServer() {
+            console.log('Terminating report now...');
+
             fetch('/terminate', {
                 method: "POST",
                 headers: {
@@ -319,7 +322,13 @@
             });
         }
 
-        window.addEventListener('unload', terminateServer);
+        const terminateBtn = document.getElementById('terminate');
+
+        if(terminateBtn) {
+            terminateBtn.addEventListener('click', terminateServer);
+        }
+
+        //window.addEventListener('unload', terminateServer);
 
         [...document.querySelectorAll('img')].forEach((img) => {
             new Viewer(img);

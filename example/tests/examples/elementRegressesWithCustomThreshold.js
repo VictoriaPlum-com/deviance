@@ -1,4 +1,5 @@
 module.exports = {
+    '@disabled': true,
     '@tags': ['approved'],
     'elementRegresses working with threshold override': function squirrelTest(browser) {
         browser
