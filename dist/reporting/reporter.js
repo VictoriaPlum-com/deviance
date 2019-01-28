@@ -20,7 +20,7 @@ exports.default = {
     write: (results, settings) => {
         let reportEnabled = settings.reporting.enabled;
         if ((0, _helpers.hasProperty)(process.env, 'OPEN_REPORT')) {
-            reportEnabled = process.env.OPEN_REPORT;
+            reportEnabled = process.env.OPEN_REPORT === 'true';
         }
 
         if (reportEnabled) {
