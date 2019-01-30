@@ -3,6 +3,7 @@ import express from 'express';
 import exphbs from 'express-handlebars';
 import path from 'path';
 import opn from 'opn';
+import normalisePath from 'normalize-path';
 import approve from './regression-approver';
 
 export default function serve(port, results, settings) {
@@ -32,9 +33,9 @@ export default function serve(port, results, settings) {
         res.send('OK');
     });
 
-    app.use(`/${settings.expectedPath}`, express.static(settings.expectedPath));
-    app.use(`/${settings.actualPath}`, express.static(settings.actualPath));
-    app.use('/viewerjs', express.static('./node_modules/viewerjs/dist'));
+    app.use(normalisePath(`/${settings.expectedPath}`), express.static(settings.expectedPath));
+    app.use(normalisePath(`/${settings.actualPath}`), express.static(settings.actualPath));
+    app.use(normalisePath('/viewerjs'), express.static('./node_modules/viewerjs/dist'));
 
     server = app.listen(port, () => {
         console.log('Report is now ready ...');

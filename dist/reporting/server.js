@@ -25,6 +25,10 @@ var _opn = require('opn');
 
 var _opn2 = _interopRequireDefault(_opn);
 
+var _normalizePath = require('normalize-path');
+
+var _normalizePath2 = _interopRequireDefault(_normalizePath);
+
 var _regressionApprover = require('./regression-approver');
 
 var _regressionApprover2 = _interopRequireDefault(_regressionApprover);
@@ -58,9 +62,9 @@ function serve(port, results, settings) {
         res.send('OK');
     });
 
-    app.use(`/${settings.expectedPath}`, _express2.default.static(settings.expectedPath));
-    app.use(`/${settings.actualPath}`, _express2.default.static(settings.actualPath));
-    app.use('/viewerjs', _express2.default.static('./node_modules/viewerjs/dist'));
+    app.use((0, _normalizePath2.default)(`/${settings.expectedPath}`), _express2.default.static(settings.expectedPath));
+    app.use((0, _normalizePath2.default)(`/${settings.actualPath}`), _express2.default.static(settings.actualPath));
+    app.use((0, _normalizePath2.default)('/viewerjs'), _express2.default.static('./node_modules/viewerjs/dist'));
 
     server = app.listen(port, () => {
         console.log('Report is now ready ...');
