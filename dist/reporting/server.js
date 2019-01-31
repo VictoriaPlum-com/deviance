@@ -67,7 +67,7 @@ function serve(port, results, settings) {
     app.use((0, _normalizePath2.default)('/viewerjs'), _express2.default.static('./node_modules/viewerjs/dist'));
 
     server = app.listen(port, () => {
-        console.log('Report is now ready ...');
+        console.log('Your report is ready!');
 
         (0, _opn2.default)(`http://localhost:${port}`).catch(() => {
             console.log('Unable to open remote browser');
