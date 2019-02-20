@@ -6,7 +6,8 @@ exports.assertion = class ElementRegresses {
         this.selector = handleElement(selector);
         this.filename = handleElement(filename);
         this.message = `Deviance regression (pass): <${this.selector}> {${this.filename}} comparison passed`;
-        this.expected = threshold === null ? globalThreshold : threshold;
+        this.expected = '';
+        this.threshold = threshold === null ? globalThreshold : threshold;
         this.value = (result) => {
             result.toString = () => result.message;
             return result;
@@ -27,17 +28,17 @@ exports.assertion = class ElementRegresses {
             return false;
         }
 
-        if (!hasValidThreshold(this.expected)) {
+        if (!hasValidThreshold(this.threshold)) {
             this.message = 'Deviance regression (fail): The supplied threshold parameter is not between 0 and 1';
-            data.message = `${typeof this.expected} ${this.expected}`;
+            data.message = `${typeof this.threshold} ${this.threshold}`;
             this.expected = 'Requires number between 0 and 1';
             return false;
         }
 
-        const meetsCriteria = diff.percent <= this.expected;
+        const meetsCriteria = diff.percent <= this.threshold;
         if (!meetsCriteria) {
             this.message = `Deviance regression (fail): <${this.selector}> {${this.filename}} comparison failed`;
-            this.expected = `less than or equal to ${this.expected}`;
+            this.expected = `less than or equal to ${this.threshold}`;
             data.message = `${diff.percent}`;
         }
 
