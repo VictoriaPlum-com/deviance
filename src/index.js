@@ -43,7 +43,7 @@ module.exports = class Deviance {
     }
 
     reporter(results, done) {
-        reporter.write(results, this.deviance);
+        reporter.write(results, this.settings);
 
         done();
     }
