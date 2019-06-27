@@ -71,7 +71,7 @@
             margin-top: 2rem;
         }
 
-        section {
+        section.testgroup {
             padding: 4rem 0;
             border-bottom: 0.1rem solid darkgrey;
         }
@@ -97,32 +97,19 @@
             margin: 0.3rem;
         }
 
-        .show-passed section.success *.fail,
-        .show-passed section.success *.errors.show-errors {
+        .show-passed section.testsingle:not(.success),
+        .show-passed section.testgroup:not(.has-passed),
+        .show-errors section.testsingle:not(.error),
+        .show-errors section.testgroup:not(.has-errors),
+        .show-failed section.testsingle:not(.fail),
+        .show-failed section.testgroup:not(.has-failed) {
             display: none;
         }
 
-        .show-errors section.errors *.success,
-        .show-errors section.errors *.fail,
-        .show-errors section.fail,
-        .show-errors section.success {
-            display: none;
-        }
-
-        .show-failed section.fail *.success,
-        .show-failed section.fail *.error,
-        .show-failed section.success,
-        .show-failed section.errors {
-            display: none;
-        }
-        .show-failed section.fail,
-        .show-passed section.success,
-        .show-errors section.errors {
-            display: block;
-        }
         .hide-skipped section.skipped {
             display: none;
         }
+
         .error-msg {
             padding: .75rem 1.25rem;
             color: #721c24;
@@ -150,36 +137,61 @@
 
     <div class="container body-container">
         {{#each results.modules}}
-            <section>
+            <section class="testgroup{{#if skippedCount}} has-skipped{{/if}}{{#if failedCount}} has-failed{{/if}}{{#if errorsCount}} has-errors{{/if}}{{#if passedCount}} has-passed{{/if}}">
                 <h2>{{@key}} {{#if skipped}}<small>(skipped)</small>{{/if}}</h2>
 
-                {{#if htmlErrorMsgs}}
-                    <h4 class="errors">The following errors have occured and need addressing for all tests to run: </h4>
-                    <ul>
-                        {{#each htmlErrorMsgs}}
-                        <li class="error-msg">
-                            {{{ this }}}
-                        </li>
-                        {{/each}}
-                    </ul>
-                {{/if}}
-
                 {{#each completed}}
-                    <h3>{{@key}}</h3>
+                    <section class="testsingle">
+                        <h3>{{@key}}</h3>
 
-                    <ul>
-                        {{#each assertions}}
-                            <li class="assertion {{#if failure}}fail{{else}}success{{/if}}" id="section-{{devianceId}}">
-                                <p class="{{#if failure}}fail{{else}}success{{/if}} i-can-be-approved">
-                                    {{message}} {{#if failure}} - {{failure}}{{/if}}
-                                </p>
+                        <ul>
+                            {{#each assertions}}
+                                <li class="assertion {{#if failure}}fail{{else}}success{{/if}}" id="section-{{devianceId}}">
+                                    <p class="{{#if failure}}fail{{else}}success{{/if}} i-can-be-approved">
+                                        {{message}} {{#if failure}} - {{failure}}{{/if}}
+                                    </p>
 
-                                {{#if stacktrace}}
-                                    <code><pre>{{stacktrace}}</pre></code>
-                                {{/if}}
+                                    {{#if stacktrace}}
+                                        <code><pre>{{stacktrace}}</pre></code>
+                                    {{/if}}
 
-                                {{#if failure}}
-                                    {{#if devianceFilePath.diff}}
+                                    {{#if failure}}
+                                        {{#if devianceFilePath.diff}}
+                                            <div class="row vrt-output">
+                                                <div class="column column-33 to-remove">
+                                                    <img src="{{ devianceFilePath.expected }}">
+                                                </div>
+                                                <div class="column column-33 to-remove">
+                                                    <img src="{{ devianceFilePath.diff }}">
+                                                </div>
+                                                <div class="column column-33">
+                                                    <img src="{{ devianceFilePath.actual }}">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="approve-button column column-33 column-offset-66">
+                                                    <button class="i-approve" data-id="{{ devianceId }}">Approve change</button>
+                                                </div>
+                                            </div>
+                                        {{/if}}
+                                    {{/if}}
+
+                                    {{#if isNewDeviance}}
+                                        <div class="row vrt-output">
+                                            <div class="column column-33 to-remove"></div>
+                                            <div class="column column-33 to-remove"></div>
+                                            <div class="column column-33">
+                                                <img src="{{ devianceFilePath.actual }}">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="approve-button column column-33 column-offset-66">
+                                                <button class="i-approve" data-id="{{ devianceId }}">Approve change</button>
+                                            </div>
+                                        </div>
+                                    {{/if}}
+
+                                    {{#if isPassedDeviance}}
                                         <div class="row vrt-output">
                                             <div class="column column-33 to-remove">
                                                 <img src="{{ devianceFilePath.expected }}">
@@ -191,56 +203,29 @@
                                                 <img src="{{ devianceFilePath.actual }}">
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="approve-button column column-33 column-offset-66">
-                                                <button class="i-approve" data-id="{{ devianceId }}">Approve change</button>
-                                            </div>
-                                        </div>
                                     {{/if}}
-                                {{/if}}
+                                </li>
+                            {{/each}}
+                        </ul>
+                        {{#if failed}}
+                            <p class="fail"><strong>FAILED:</strong> {{failed}} assertions failed. {{passed}} passed. ({{time}}s)</p>
+                        {{else if errors}}
+                            {{#if ../htmlErrorMsgs}}
+                                <h4 class="errors">The following errors have occurred and need addressing for all tests to run: </h4>
+                                <ul>
+                                    {{#each ../htmlErrorMsgs}}
+                                        <li class="error-msg">
+                                            {{{ this }}}
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                            {{/if}}
 
-                                {{#if isNewDeviance}}
-                                    <div class="row vrt-output">
-                                        <div class="column column-33 to-remove"></div>
-                                        <div class="column column-33 to-remove"></div>
-                                        <div class="column column-33">
-                                            <img src="{{ devianceFilePath.actual }}">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="approve-button column column-33 column-offset-66">
-                                            <button class="i-approve" data-id="{{ devianceId }}">Approve change</button>
-                                        </div>
-                                    </div>
-                                {{/if}}
-
-                                {{#if isPassedDeviance}}
-                                    <div class="row vrt-output">
-                                        <div class="column column-33 to-remove">
-                                            <img src="{{ devianceFilePath.expected }}">
-                                        </div>
-                                        <div class="column column-33 to-remove">
-                                            <img src="{{ devianceFilePath.diff }}">
-                                        </div>
-                                        <div class="column column-33">
-                                            <img src="{{ devianceFilePath.actual }}">
-                                        </div>
-                                    </div>
-                                {{/if}}
-                            </li>
-                        {{/each}}
-                    </ul>
-
-                    {{#if failed}}
-                        <p class="fail"> <strong>FAILED:</strong> {{failed}} assertions failed.</p>
-                        <p class="success"> {{passed}} passed. ({{time}}s)</p>
-                    {{else if errors}}
-                        <p class="errors">
-                            <strong>Error:</strong> {{errors}} assertions failed to run.
-                        </p>
-                    {{else}}
-                        <p class="success"><strong>OK.</strong> {{passed}} assertions passed. ({{time}}s)</p>
-                    {{/if}}
+                            <p class="error"><strong>Error:</strong> {{errors}} assertions failed to run.</p>
+                        {{else}}
+                            <p class="success"><strong>OK.</strong> {{passed}} assertions passed. ({{time}}s)</p>
+                        {{/if}}
+                    </section>
                 {{/each}}
 
                 {{#if skipped}}
@@ -250,6 +235,7 @@
                         {{/each}}
                     </ul>
                 {{/if}}
+
             </section>
         {{/each}}
     </div>
@@ -282,7 +268,7 @@
             });
         });
 
-        const sectionElements = document.querySelectorAll('section');
+        const sectionElements = document.querySelectorAll('section.testsingle');
         sectionElements.forEach(section => {
             section.childNodes.forEach(el => {
                 if (el.classList && el.classList.length > 0) {

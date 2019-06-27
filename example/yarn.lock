@@ -678,7 +678,7 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
 
 deviance@./..:
-  version "0.1.0"
+  version "0.2.5"
   dependencies:
     ansi_up "^3.0.0"
     body-parser "^1.18.3"
@@ -687,6 +687,7 @@ deviance@./..:
     fs-extra "^7.0.0"
     handlebars "^4.0.11"
     jimp "^0.4.0"
+    normalize-path "^3.0.0"
     opn "^5.3.0"
     prompt "^1.0.0"
     uuid "^3.3.2"
@@ -1673,6 +1674,11 @@ normalize-package-data@^2.3.2:
     is-builtin-module "^1.0.0"
     semver "2 || 3 || 4 || 5"
     validate-npm-package-license "^3.0.1"
+
+normalize-path@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
+  integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
 npm-delay@^1.0.4:
   version "1.0.4"
