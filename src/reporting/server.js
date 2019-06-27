@@ -10,9 +10,11 @@ export default function serve(port, results, settings) {
     const app = express();
     let server;
 
-    app.engine('handlebars', exphbs());
+    const viewsPath = path.join(__dirname, '/views');
+    app.engine('handlebars', exphbs({ defaultLayout: 'index.handlebars', layoutsDir: viewsPath }));
 
     app.set('views', path.join(__dirname, '/views'));
+
     app.set('view engine', 'handlebars');
 
     app.use(bodyParser.json());

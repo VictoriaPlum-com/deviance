@@ -39,9 +39,11 @@ function serve(port, results, settings) {
     const app = (0, _express2.default)();
     let server;
 
-    app.engine('handlebars', (0, _expressHandlebars2.default)());
+    const viewsPath = _path2.default.join(__dirname, '/views');
+    app.engine('handlebars', (0, _expressHandlebars2.default)({ defaultLayout: 'index.handlebars', layoutsDir: viewsPath }));
 
     app.set('views', _path2.default.join(__dirname, '/views'));
+
     app.set('view engine', 'handlebars');
 
     app.use(_bodyParser2.default.json());
