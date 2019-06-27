@@ -1,6 +1,6 @@
 {
     "name": "deviance",
-    "version": "0.2.6",
+    "version": "0.2.7",
     "description": "Extends NightwatchJS with a reporting tool and the ability to do visual regression assertions",
     "main": "dist/index.js",
     "scripts": {
