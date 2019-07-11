@@ -63,6 +63,9 @@
         "jest": "^23.4.1",
         "jest-each": "^23.5.0"
     },
+    "resolutions": {
+        "jest/**/mem": "4.0.0"
+    },
     "files": [
         "LICENSE.md",
         "README.md",
