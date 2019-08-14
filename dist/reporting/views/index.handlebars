@@ -204,6 +204,12 @@
                                             </div>
                                         </div>
                                     {{/if}}
+
+                                    {{#each screenshots}}
+                                        <div class="row">
+                                            <img src="{{ this }}">
+                                        </div>
+                                    {{/each}}
                                 </li>
                             {{/each}}
                         </ul>

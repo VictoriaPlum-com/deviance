@@ -39,6 +39,10 @@ export default function serve(port, results, settings) {
     app.use(normalisePath(`/${settings.actualPath}`), express.static(settings.actualPath));
     app.use(normalisePath('/viewerjs'), express.static('./node_modules/viewerjs/dist'));
 
+    if (settings.screenshotsPath) {
+        app.use(normalisePath(`/${settings.screenshotsPath}`), express.static(settings.screenshotsPath));
+    }
+
     server = app.listen(port, () => {
         console.log('Your report is ready!');
 

@@ -68,6 +68,10 @@ function serve(port, results, settings) {
     app.use((0, _normalizePath2.default)(`/${settings.actualPath}`), _express2.default.static(settings.actualPath));
     app.use((0, _normalizePath2.default)('/viewerjs'), _express2.default.static('./node_modules/viewerjs/dist'));
 
+    if (settings.screenshotsPath) {
+        app.use((0, _normalizePath2.default)(`/${settings.screenshotsPath}`), _express2.default.static(settings.screenshotsPath));
+    }
+
     server = app.listen(port, () => {
         console.log('Your report is ready!');
 
