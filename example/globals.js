@@ -13,7 +13,7 @@ const deviance = new Deviance({
 
 module.exports = {
     beforeEach(browser, done) {
-        browser.resizeWindow(500, 800, done);
+        browser.resizeWindow(500, 300, done);
     },
     deviance: deviance.settings,
     reporter: deviance.reporter,
