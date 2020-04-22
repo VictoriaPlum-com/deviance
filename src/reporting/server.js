@@ -6,9 +6,23 @@ import opn from 'opn';
 import normalisePath from 'normalize-path';
 import approve from './regression-approver';
 
+let server;
+let closer;
+
+function setCloser(timeout = 4000) {
+    if (closer) {
+        clearTimeout(closer);
+    }
+
+    closer = setTimeout(() => {
+        server.close();
+        console.log('Report closed');
+        process.exit();
+    }, timeout);
+}
+
 export default function serve(port, results, settings) {
     const app = express();
-    let server;
 
     const viewsPath = path.join(__dirname, '/views');
     app.engine('handlebars', exphbs({ defaultLayout: 'index.handlebars', layoutsDir: viewsPath }));
@@ -23,11 +37,10 @@ export default function serve(port, results, settings) {
         res.render('index', { results });
     });
 
-    app.post('/terminate', (req, res) => {
-        res.send('Going away....');
-        server.close();
-        console.log('Report closed');
-        process.exit();
+    setCloser();
+    app.post('/keep-alive', (req, res) => {
+        setCloser();
+        res.send('OK');
     });
 
     app.post('/approve', (req, res) => {
